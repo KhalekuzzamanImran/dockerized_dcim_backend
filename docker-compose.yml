@@ -1,0 +1,107 @@
+services:
+  redis:
+    image: "redis:alpine"
+    restart: "on-failure"
+    expose:
+      - 6379
+
+  dcim_backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    expose:
+      - 5000
+    env_file:
+      - .env
+    environment:
+      - PYTHONUNBUFFERED=1
+    links:
+      - "redis"
+    volumes:
+      - staticfiles:/opt/app/static/static_root
+      - mediafiles:/opt/app/media/
+      - .:/opt/app
+
+  dcim_backend_celery:
+    build: .
+    command: celery  -A dcim worker -l info
+    restart: "on-failure"
+    depends_on:
+      - "redis"
+      - "dcim_backend"
+    volumes:
+      - .:/opt/app
+
+  dcim_backend_celery-beat:
+    build: .
+    command: celery -A dcim beat -l info
+    restart: "on-failure"
+    depends_on:
+      - "redis"
+      - "dcim_backend"
+    volumes:
+      - .:/opt/app
+
+  postgres:
+    container_name: dcim_postgres
+    image: postgres:12
+    restart: "on-failure"
+    env_file:
+      - .env
+    environment:
+      - POSTGRES_DB=dcim
+      - POSTGRES_USER=dcim_user
+      - POSTGRES_PASSWORD=dcim_password
+      - POSTGRES_PORT=5432
+    ports:
+      - 5433:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  mongo:
+    image: mongo
+    container_name: dcim_mongo
+    restart: "on-failure"
+    ports:
+      - 27018:27017
+    env_file:
+      - .env
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
+      - MONGO_INITDB_DATABASE=${MONGO_DB_NAME}
+      - MONGO_INITDB_USERNAME=${MONGO_DB_USERNAME}
+      - MONGO_INITDB_PASSWORD=${MONGO_DB_PASSWORD}
+    volumes:
+      - mongodb_data_container:/data/db
+
+  broker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: bash -c "cd base/broker && python consumer.py"
+    restart: on-failure
+    env_file:
+      - .env
+    environment:
+      - PYTHONUNBUFFERED=1
+    volumes:
+      - .:/opt/app
+
+  nginx:
+    image: nginx:mainline-alpine
+    restart: always
+    ports:
+      - "8010:8000"
+    volumes:
+      - ./nginx:/etc/nginx/conf.d
+      - staticfiles:/opt/staticfiles
+      - mediafiles:/opt/mediafiles
+    depends_on:
+      - "dcim_backend"
+
+volumes:
+  staticfiles:
+  mediafiles:
+  mongodb_data_container:
+  postgres_data:
