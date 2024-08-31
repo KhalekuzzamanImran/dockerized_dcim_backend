@@ -1290,3 +1290,131 @@
 2024-08-30 02:40:07,527 pop.CPM_RT_mixins INFO     mongo_db = RTModelCPM, topic = MQTT_RT_DATA created 66d0dca7e71bcb35469ce07d succesfully
 2024-08-30 02:40:07,538 pop.CPM_RT_mixins INFO     mongo_db = TemporaryRTModelCPM, topic = MQTT_RT_DATA created 66d0dca7e71bcb35469ce07e succesfully
 2024-08-30 02:40:07,546 pop.CPM_RT_mixins INFO     mongo_db = TodayRTModelCPM, topic = MQTT_RT_DATA created 66d0dca7e71bcb35469ce07f succesfully
+2024-08-30 03:05:39,211 django.request WARNING  Not Found: /favicon.ico
+2024-08-30 03:27:22,729 pop.CPM_DAY_DATA_mongo_mixins INFO     mongo_db = DayDataModelCPM, topic = MQTT_DAY_DATA created 66d0e7ba664b4df155f9c466 succesfully
+2024-08-30 03:27:22,861 pop.CPM_ENY_NOW_mongo_mixins INFO     mongo_db = EnyNowDataModelCPM, topic = MQTT_ENY_NOW created 66d0e7ba664b4df155f9c467 succesfully
+2024-08-30 03:27:22,937 pop.CPM_ENY_NOW_mongo_mixins INFO     mongo_db = TemporaryEnyNowDataModelCPM, topic = MQTT_ENY_NOW created 66d0e7ba664b4df155f9c468 succesfully
+2024-08-30 03:27:23,001 pop.CPM_ENY_NOW_mongo_mixins INFO     mongo_db = TodayEnyNowDataModelCPM, topic = MQTT_ENY_NOW created 66d0e7ba664b4df155f9c469 succesfully
+2024-08-30 03:27:23,068 pop.CPM_ENY_NOW_mongo_mixins INFO     mongo_db = Last7DaysEnyNowDataModelCPM, topic = MQTT_ENY_NOW created 66d0e7bb664b4df155f9c46a succesfully
+2024-08-30 03:27:23,145 pop.CPM_RT_mixins INFO     mongo_db = RTModelCPM, topic = MQTT_RT_DATA created 66d0e7bb664b4df155f9c46b succesfully
+2024-08-30 03:27:23,200 pop.CPM_RT_mixins INFO     mongo_db = TemporaryRTModelCPM, topic = MQTT_RT_DATA created 66d0e7bb664b4df155f9c46c succesfully
+2024-08-30 03:27:23,251 pop.CPM_RT_mixins INFO     mongo_db = TodayRTModelCPM, topic = MQTT_RT_DATA created 66d0e7bb664b4df155f9c46d succesfully
+2024-08-30 03:27:37,596 pop.CPM_RT_mixins INFO     mongo_db = RTModelCPM, topic = MQTT_RT_DATA created 66d0e7c9664b4df155f9c46e succesfully
+2024-08-30 03:27:37,603 pop.CPM_RT_mixins INFO     mongo_db = TemporaryRTModelCPM, topic = MQTT_RT_DATA created 66d0e7c9664b4df155f9c46f succesfully
+2024-08-30 03:27:37,611 pop.CPM_RT_mixins INFO     mongo_db = TodayRTModelCPM, topic = MQTT_RT_DATA created 66d0e7c9664b4df155f9c470 succesfully
+2024-08-30 03:28:07,802 pop.CPM_RT_mixins INFO     mongo_db = RTModelCPM, topic = MQTT_RT_DATA created 66d0e7e7664b4df155f9c471 succesfully
+2024-08-30 03:28:07,814 pop.CPM_RT_mixins INFO     mongo_db = TemporaryRTModelCPM, topic = MQTT_RT_DATA created 66d0e7e7664b4df155f9c472 succesfully
+2024-08-30 03:28:07,823 pop.CPM_RT_mixins INFO     mongo_db = TodayRTModelCPM, topic = MQTT_RT_DATA created 66d0e7e7664b4df155f9c473 succesfully
+2024-08-30 03:29:07,925 pop.CPM_RT_mixins INFO     mongo_db = RTModelCPM, topic = MQTT_RT_DATA created 66d0e823664b4df155f9c474 succesfully
+2024-08-30 03:29:07,936 pop.CPM_RT_mixins INFO     mongo_db = TemporaryRTModelCPM, topic = MQTT_RT_DATA created 66d0e823664b4df155f9c475 succesfully
+2024-08-30 03:29:07,943 pop.CPM_RT_mixins INFO     mongo_db = TodayRTModelCPM, topic = MQTT_RT_DATA created 66d0e823664b4df155f9c476 succesfully
+2024-08-30 03:29:36,549 pop.CPM_RT_mixins INFO     mongo_db = RTModelCPM, topic = MQTT_RT_DATA created 66d0e840664b4df155f9c477 succesfully
+2024-08-30 03:29:36,558 pop.CPM_RT_mixins INFO     mongo_db = TemporaryRTModelCPM, topic = MQTT_RT_DATA created 66d0e840664b4df155f9c478 succesfully
+2024-08-30 03:29:36,566 pop.CPM_RT_mixins INFO     mongo_db = TodayRTModelCPM, topic = MQTT_RT_DATA created 66d0e840664b4df155f9c479 succesfully
+2024-08-30 03:29:39,789 django.request WARNING  Not Found: /api/v1.0/pops/pop-devices/
+2024-08-30 03:29:47,790 django.request WARNING  Not Found: /api/v1.0/pops/
+2024-08-30 03:30:07,819 pop.CPM_RT_mixins INFO     mongo_db = RTModelCPM, topic = MQTT_RT_DATA created 66d0e85f664b4df155f9c47a succesfully
+2024-08-30 03:30:07,828 pop.CPM_RT_mixins INFO     mongo_db = TemporaryRTModelCPM, topic = MQTT_RT_DATA created 66d0e85f664b4df155f9c47b succesfully
+2024-08-30 03:30:07,837 pop.CPM_RT_mixins INFO     mongo_db = TodayRTModelCPM, topic = MQTT_RT_DATA created 66d0e85f664b4df155f9c47c succesfully
+2024-08-30 03:30:36,903 pop.CPM_RT_mixins INFO     mongo_db = RTModelCPM, topic = MQTT_RT_DATA created 66d0e87c664b4df155f9c47d succesfully
+2024-08-30 03:30:36,910 pop.CPM_RT_mixins INFO     mongo_db = TemporaryRTModelCPM, topic = MQTT_RT_DATA created 66d0e87c664b4df155f9c47e succesfully
+2024-08-30 03:30:36,917 pop.CPM_RT_mixins INFO     mongo_db = TodayRTModelCPM, topic = MQTT_RT_DATA created 66d0e87c664b4df155f9c47f succesfully
+2024-08-30 03:30:40,870 django.request WARNING  Unauthorized: /api/v1.0/pop/
+2024-08-30 03:30:46,944 django.request WARNING  Unauthorized: /api/v1.0/pop/
+2024-08-30 03:31:06,531 pop.CPM_RT_mixins INFO     mongo_db = RTModelCPM, topic = MQTT_RT_DATA created 66d0e89a664b4df155f9c480 succesfully
+2024-08-30 03:31:06,538 pop.CPM_RT_mixins INFO     mongo_db = TemporaryRTModelCPM, topic = MQTT_RT_DATA created 66d0e89a664b4df155f9c481 succesfully
+2024-08-30 03:31:06,545 pop.CPM_RT_mixins INFO     mongo_db = TodayRTModelCPM, topic = MQTT_RT_DATA created 66d0e89a664b4df155f9c482 succesfully
+2024-08-30 03:31:34,356 django.request WARNING  Not Found: /api/v1.0/
+2024-08-30 03:31:43,167 django.request WARNING  Unauthorized: /api/v1.0/pop/
+2024-08-30 03:32:07,736 pop.CPM_RT_mixins INFO     mongo_db = RTModelCPM, topic = MQTT_RT_DATA created 66d0e8d7664b4df155f9c483 succesfully
+2024-08-30 03:32:07,743 pop.CPM_RT_mixins INFO     mongo_db = TemporaryRTModelCPM, topic = MQTT_RT_DATA created 66d0e8d7664b4df155f9c484 succesfully
+2024-08-30 03:32:07,749 pop.CPM_RT_mixins INFO     mongo_db = TodayRTModelCPM, topic = MQTT_RT_DATA created 66d0e8d7664b4df155f9c485 succesfully
+2024-08-30 03:32:37,877 pop.CPM_RT_mixins INFO     mongo_db = RTModelCPM, topic = MQTT_RT_DATA created 66d0e8f5664b4df155f9c486 succesfully
+2024-08-30 03:32:37,884 pop.CPM_RT_mixins INFO     mongo_db = TemporaryRTModelCPM, topic = MQTT_RT_DATA created 66d0e8f5664b4df155f9c487 succesfully
+2024-08-30 03:32:37,891 pop.CPM_RT_mixins INFO     mongo_db = TodayRTModelCPM, topic = MQTT_RT_DATA created 66d0e8f5664b4df155f9c488 succesfully
+2024-08-30 03:33:09,284 pop.CPM_DAY_DATA_mongo_mixins INFO     mongo_db = DayDataModelCPM, topic = MQTT_DAY_DATA created 66d0e915bdf0fd217a957c9a succesfully
+2024-08-30 03:33:09,329 pop.CPM_ENY_NOW_mongo_mixins INFO     mongo_db = EnyNowDataModelCPM, topic = MQTT_ENY_NOW created 66d0e915bdf0fd217a957c9b succesfully
+2024-08-30 03:33:09,344 pop.CPM_ENY_NOW_mongo_mixins INFO     mongo_db = TemporaryEnyNowDataModelCPM, topic = MQTT_ENY_NOW created 66d0e915bdf0fd217a957c9c succesfully
+2024-08-30 03:33:09,354 pop.CPM_ENY_NOW_mongo_mixins INFO     mongo_db = TodayEnyNowDataModelCPM, topic = MQTT_ENY_NOW created 66d0e915bdf0fd217a957c9d succesfully
+2024-08-30 03:33:09,387 pop.CPM_ENY_NOW_mongo_mixins INFO     mongo_db = Last7DaysEnyNowDataModelCPM, topic = MQTT_ENY_NOW created 66d0e915bdf0fd217a957c9e succesfully
+2024-08-30 03:33:09,440 pop.CPM_RT_mixins INFO     mongo_db = RTModelCPM, topic = MQTT_RT_DATA created 66d0e915bdf0fd217a957c9f succesfully
+2024-08-30 03:33:09,469 pop.CPM_RT_mixins INFO     mongo_db = TemporaryRTModelCPM, topic = MQTT_RT_DATA created 66d0e915bdf0fd217a957ca0 succesfully
+2024-08-30 03:33:09,492 pop.CPM_RT_mixins INFO     mongo_db = TodayRTModelCPM, topic = MQTT_RT_DATA created 66d0e915bdf0fd217a957ca1 succesfully
+2024-08-30 03:33:25,125 django.request WARNING  Not Found: /api/v1.0/pop/pops
+2024-08-30 03:33:37,748 pop.CPM_RT_mixins INFO     mongo_db = RTModelCPM, topic = MQTT_RT_DATA created 66d0e931bdf0fd217a957ca2 succesfully
+2024-08-30 03:33:37,755 pop.CPM_RT_mixins INFO     mongo_db = TemporaryRTModelCPM, topic = MQTT_RT_DATA created 66d0e931bdf0fd217a957ca3 succesfully
+2024-08-30 03:33:37,762 pop.CPM_RT_mixins INFO     mongo_db = TodayRTModelCPM, topic = MQTT_RT_DATA created 66d0e931bdf0fd217a957ca4 succesfully
+2024-08-30 03:33:54,349 django.request WARNING  Not Found: /api/v1.0/pops/pop-devices/
+2024-08-30 03:34:06,921 pop.CPM_RT_mixins INFO     mongo_db = RTModelCPM, topic = MQTT_RT_DATA created 66d0e94ebdf0fd217a957ca5 succesfully
+2024-08-30 03:34:06,932 pop.CPM_RT_mixins INFO     mongo_db = TemporaryRTModelCPM, topic = MQTT_RT_DATA created 66d0e94ebdf0fd217a957ca6 succesfully
+2024-08-30 03:34:06,939 pop.CPM_RT_mixins INFO     mongo_db = TodayRTModelCPM, topic = MQTT_RT_DATA created 66d0e94ebdf0fd217a957ca7 succesfully
+2024-08-30 03:34:14,323 django.request WARNING  Not Found: /api/v1.0/pops/pop-devices/
+2024-08-30 03:34:14,601 pop.CPM_ENY_NOW_mongo_mixins INFO     mongo_db = EnyNowDataModelCPM, topic = MQTT_ENY_NOW created 66d0e956bdf0fd217a957ca8 succesfully
+2024-08-30 03:34:14,613 pop.CPM_ENY_NOW_mongo_mixins INFO     mongo_db = TemporaryEnyNowDataModelCPM, topic = MQTT_ENY_NOW created 66d0e956bdf0fd217a957ca9 succesfully
+2024-08-30 03:34:14,627 pop.CPM_ENY_NOW_mongo_mixins INFO     mongo_db = TodayEnyNowDataModelCPM, topic = MQTT_ENY_NOW created 66d0e956bdf0fd217a957caa succesfully
+2024-08-30 03:34:14,638 pop.CPM_ENY_NOW_mongo_mixins INFO     mongo_db = Last7DaysEnyNowDataModelCPM, topic = MQTT_ENY_NOW created 66d0e956bdf0fd217a957cab succesfully
+2024-08-30 03:34:42,831 django.request WARNING  Not Found: /api/v1.0/
+2024-08-30 03:35:23,280 pop.CPM_DAY_DATA_mongo_mixins INFO     mongo_db = DayDataModelCPM, topic = MQTT_DAY_DATA created 66d0e99b3d7dc16db3fb2ace succesfully
+2024-08-30 03:35:23,311 pop.CPM_ENY_NOW_mongo_mixins INFO     mongo_db = EnyNowDataModelCPM, topic = MQTT_ENY_NOW created 66d0e99b3d7dc16db3fb2acf succesfully
+2024-08-30 03:35:23,320 pop.CPM_ENY_NOW_mongo_mixins INFO     mongo_db = TemporaryEnyNowDataModelCPM, topic = MQTT_ENY_NOW created 66d0e99b3d7dc16db3fb2ad0 succesfully
+2024-08-30 03:35:23,358 pop.CPM_ENY_NOW_mongo_mixins INFO     mongo_db = TodayEnyNowDataModelCPM, topic = MQTT_ENY_NOW created 66d0e99b3d7dc16db3fb2ad1 succesfully
+2024-08-30 03:35:23,386 pop.CPM_ENY_NOW_mongo_mixins INFO     mongo_db = Last7DaysEnyNowDataModelCPM, topic = MQTT_ENY_NOW created 66d0e99b3d7dc16db3fb2ad2 succesfully
+2024-08-30 03:35:23,410 pop.CPM_RT_mixins INFO     mongo_db = RTModelCPM, topic = MQTT_RT_DATA created 66d0e99b3d7dc16db3fb2ad3 succesfully
+2024-08-30 03:35:23,430 pop.CPM_RT_mixins INFO     mongo_db = TemporaryRTModelCPM, topic = MQTT_RT_DATA created 66d0e99b3d7dc16db3fb2ad4 succesfully
+2024-08-30 03:35:23,449 pop.CPM_RT_mixins INFO     mongo_db = TodayRTModelCPM, topic = MQTT_RT_DATA created 66d0e99b3d7dc16db3fb2ad5 succesfully
+2024-08-30 03:35:26,239 django.request WARNING  Not Found: /api/v1.0/
+2024-08-30 03:35:37,012 pop.CPM_RT_mixins INFO     mongo_db = RTModelCPM, topic = MQTT_RT_DATA created 66d0e9a93d7dc16db3fb2ad6 succesfully
+2024-08-30 03:35:37,020 pop.CPM_RT_mixins INFO     mongo_db = TemporaryRTModelCPM, topic = MQTT_RT_DATA created 66d0e9a93d7dc16db3fb2ad7 succesfully
+2024-08-30 03:35:37,027 pop.CPM_RT_mixins INFO     mongo_db = TodayRTModelCPM, topic = MQTT_RT_DATA created 66d0e9a93d7dc16db3fb2ad8 succesfully
+2024-08-30 03:36:07,588 pop.CPM_RT_mixins INFO     mongo_db = RTModelCPM, topic = MQTT_RT_DATA created 66d0e9c73d7dc16db3fb2ad9 succesfully
+2024-08-30 03:36:07,598 pop.CPM_RT_mixins INFO     mongo_db = TemporaryRTModelCPM, topic = MQTT_RT_DATA created 66d0e9c73d7dc16db3fb2ada succesfully
+2024-08-30 03:36:07,604 pop.CPM_RT_mixins INFO     mongo_db = TodayRTModelCPM, topic = MQTT_RT_DATA created 66d0e9c73d7dc16db3fb2adb succesfully
+2024-08-30 03:36:37,984 pop.CPM_RT_mixins INFO     mongo_db = RTModelCPM, topic = MQTT_RT_DATA created 66d0e9e53d7dc16db3fb2adc succesfully
+2024-08-30 03:36:37,991 pop.CPM_RT_mixins INFO     mongo_db = TemporaryRTModelCPM, topic = MQTT_RT_DATA created 66d0e9e53d7dc16db3fb2add succesfully
+2024-08-30 03:36:37,998 pop.CPM_RT_mixins INFO     mongo_db = TodayRTModelCPM, topic = MQTT_RT_DATA created 66d0e9e53d7dc16db3fb2ade succesfully
+2024-08-30 03:36:59,168 django.request WARNING  Unauthorized: /api/v1.0/pop/pop-devices/
+2024-08-30 03:37:06,945 pop.CPM_RT_mixins INFO     mongo_db = RTModelCPM, topic = MQTT_RT_DATA created 66d0ea023d7dc16db3fb2adf succesfully
+2024-08-30 03:37:06,951 pop.CPM_RT_mixins INFO     mongo_db = TemporaryRTModelCPM, topic = MQTT_RT_DATA created 66d0ea023d7dc16db3fb2ae0 succesfully
+2024-08-30 03:37:06,958 pop.CPM_RT_mixins INFO     mongo_db = TodayRTModelCPM, topic = MQTT_RT_DATA created 66d0ea023d7dc16db3fb2ae1 succesfully
+2024-08-30 03:37:37,660 pop.CPM_RT_mixins INFO     mongo_db = RTModelCPM, topic = MQTT_RT_DATA created 66d0ea213d7dc16db3fb2ae2 succesfully
+2024-08-30 03:37:37,667 pop.CPM_RT_mixins INFO     mongo_db = TemporaryRTModelCPM, topic = MQTT_RT_DATA created 66d0ea213d7dc16db3fb2ae3 succesfully
+2024-08-30 03:37:37,674 pop.CPM_RT_mixins INFO     mongo_db = TodayRTModelCPM, topic = MQTT_RT_DATA created 66d0ea213d7dc16db3fb2ae4 succesfully
+2024-08-30 03:37:49,948 django.request WARNING  Unauthorized: /api/v1.0/pop/pop-device-states/
+2024-08-30 03:37:58,947 django.request WARNING  Unauthorized: /api/v1.0/pop/pop-device-states/
+2024-08-30 03:38:06,845 pop.CPM_RT_mixins INFO     mongo_db = RTModelCPM, topic = MQTT_RT_DATA created 66d0ea3e3d7dc16db3fb2ae5 succesfully
+2024-08-30 03:38:06,851 pop.CPM_RT_mixins INFO     mongo_db = TemporaryRTModelCPM, topic = MQTT_RT_DATA created 66d0ea3e3d7dc16db3fb2ae6 succesfully
+2024-08-30 03:38:06,858 pop.CPM_RT_mixins INFO     mongo_db = TodayRTModelCPM, topic = MQTT_RT_DATA created 66d0ea3e3d7dc16db3fb2ae7 succesfully
+2024-08-30 03:38:10,173 django.request WARNING  Unauthorized: /api/v1.0/pop/pop-device-states/
+2024-08-30 03:39:09,694 pop.CPM_DAY_DATA_mongo_mixins INFO     mongo_db = DayDataModelCPM, topic = MQTT_DAY_DATA created 66d0ea7dd3fffbced7f36660 succesfully
+2024-08-30 03:39:09,750 pop.CPM_ENY_NOW_mongo_mixins INFO     mongo_db = EnyNowDataModelCPM, topic = MQTT_ENY_NOW created 66d0ea7dd3fffbced7f36661 succesfully
+2024-08-30 03:39:09,775 pop.CPM_ENY_NOW_mongo_mixins INFO     mongo_db = TemporaryEnyNowDataModelCPM, topic = MQTT_ENY_NOW created 66d0ea7dd3fffbced7f36662 succesfully
+2024-08-30 03:39:09,787 pop.CPM_ENY_NOW_mongo_mixins INFO     mongo_db = TodayEnyNowDataModelCPM, topic = MQTT_ENY_NOW created 66d0ea7dd3fffbced7f36663 succesfully
+2024-08-30 03:39:09,807 pop.CPM_ENY_NOW_mongo_mixins INFO     mongo_db = Last7DaysEnyNowDataModelCPM, topic = MQTT_ENY_NOW created 66d0ea7dd3fffbced7f36664 succesfully
+2024-08-30 03:39:09,836 pop.CPM_RT_mixins INFO     mongo_db = RTModelCPM, topic = MQTT_RT_DATA created 66d0ea7dd3fffbced7f36665 succesfully
+2024-08-30 03:39:09,878 pop.CPM_RT_mixins INFO     mongo_db = TemporaryRTModelCPM, topic = MQTT_RT_DATA created 66d0ea7dd3fffbced7f36666 succesfully
+2024-08-30 03:39:09,902 pop.CPM_RT_mixins INFO     mongo_db = TodayRTModelCPM, topic = MQTT_RT_DATA created 66d0ea7dd3fffbced7f36667 succesfully
+2024-08-30 03:39:29,600 django.request WARNING  Not Found: /api/v1.0/pop/pop-device-states
+2024-08-30 03:39:37,673 pop.CPM_RT_mixins INFO     mongo_db = RTModelCPM, topic = MQTT_RT_DATA created 66d0ea99d3fffbced7f36668 succesfully
+2024-08-30 03:39:37,680 pop.CPM_RT_mixins INFO     mongo_db = TemporaryRTModelCPM, topic = MQTT_RT_DATA created 66d0ea99d3fffbced7f36669 succesfully
+2024-08-30 03:39:37,687 pop.CPM_RT_mixins INFO     mongo_db = TodayRTModelCPM, topic = MQTT_RT_DATA created 66d0ea99d3fffbced7f3666a succesfully
+2024-08-30 03:39:48,175 django.request WARNING  Not Found: /api/v1.0/pop/pop-devices/pop-device-states/
+2024-08-30 03:40:06,861 pop.CPM_RT_mixins INFO     mongo_db = RTModelCPM, topic = MQTT_RT_DATA created 66d0eab6d3fffbced7f3666b succesfully
+2024-08-30 03:40:06,869 pop.CPM_RT_mixins INFO     mongo_db = TemporaryRTModelCPM, topic = MQTT_RT_DATA created 66d0eab6d3fffbced7f3666c succesfully
+2024-08-30 03:40:06,876 pop.CPM_RT_mixins INFO     mongo_db = TodayRTModelCPM, topic = MQTT_RT_DATA created 66d0eab6d3fffbced7f3666d succesfully
+2024-08-30 03:40:15,049 django.request WARNING  Not Found: /api/v1.0/pop/pop-devices/pop-device-states/
+2024-08-30 03:40:23,469 django.request WARNING  Not Found: /api/v1.0/pop/pop-devices/pop-device-states/
+2024-08-30 03:41:00,103 pop.CPM_DAY_DATA_mongo_mixins INFO     mongo_db = DayDataModelCPM, topic = MQTT_DAY_DATA created 66d0eaec71ccf6cb731b83f8 succesfully
+2024-08-30 03:41:00,133 pop.CPM_ENY_NOW_mongo_mixins INFO     mongo_db = EnyNowDataModelCPM, topic = MQTT_ENY_NOW created 66d0eaec71ccf6cb731b83f9 succesfully
+2024-08-30 03:41:00,146 pop.CPM_ENY_NOW_mongo_mixins INFO     mongo_db = TemporaryEnyNowDataModelCPM, topic = MQTT_ENY_NOW created 66d0eaec71ccf6cb731b83fa succesfully
+2024-08-30 03:41:00,174 pop.CPM_ENY_NOW_mongo_mixins INFO     mongo_db = TodayEnyNowDataModelCPM, topic = MQTT_ENY_NOW created 66d0eaec71ccf6cb731b83fb succesfully
+2024-08-30 03:41:00,200 pop.CPM_ENY_NOW_mongo_mixins INFO     mongo_db = Last7DaysEnyNowDataModelCPM, topic = MQTT_ENY_NOW created 66d0eaec71ccf6cb731b83fc succesfully
+2024-08-30 03:41:00,240 pop.CPM_RT_mixins INFO     mongo_db = RTModelCPM, topic = MQTT_RT_DATA created 66d0eaec71ccf6cb731b83fd succesfully
+2024-08-30 03:41:00,265 pop.CPM_RT_mixins INFO     mongo_db = TemporaryRTModelCPM, topic = MQTT_RT_DATA created 66d0eaec71ccf6cb731b83fe succesfully
+2024-08-30 03:41:00,306 pop.CPM_RT_mixins INFO     mongo_db = TodayRTModelCPM, topic = MQTT_RT_DATA created 66d0eaec71ccf6cb731b83ff succesfully
+2024-08-30 03:41:07,680 pop.CPM_RT_mixins INFO     mongo_db = RTModelCPM, topic = MQTT_RT_DATA created 66d0eaf371ccf6cb731b8400 succesfully
+2024-08-30 03:41:07,687 pop.CPM_RT_mixins INFO     mongo_db = TemporaryRTModelCPM, topic = MQTT_RT_DATA created 66d0eaf371ccf6cb731b8401 succesfully
+2024-08-30 03:41:07,693 pop.CPM_RT_mixins INFO     mongo_db = TodayRTModelCPM, topic = MQTT_RT_DATA created 66d0eaf371ccf6cb731b8402 succesfully
+2024-08-30 03:41:19,918 django.request WARNING  Unauthorized: /api/v1.0/pop/cpm-latest-rt-data/
+2024-08-30 03:41:37,893 pop.CPM_RT_mixins INFO     mongo_db = RTModelCPM, topic = MQTT_RT_DATA created 66d0eb1171ccf6cb731b8403 succesfully
+2024-08-30 03:41:37,898 pop.CPM_RT_mixins INFO     mongo_db = TemporaryRTModelCPM, topic = MQTT_RT_DATA created 66d0eb1171ccf6cb731b8404 succesfully
+2024-08-30 03:41:37,905 pop.CPM_RT_mixins INFO     mongo_db = TodayRTModelCPM, topic = MQTT_RT_DATA created 66d0eb1171ccf6cb731b8405 succesfully

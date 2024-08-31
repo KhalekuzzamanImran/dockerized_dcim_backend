@@ -162,10 +162,13 @@ CSRF_TRUSTED_ORIGINS = [
     'https://dev.eassetfswt.com', 
     'http://13.215.201.211:8000',
     'http://localhost:5000',
+    'http://localhost:3011',
     'http://13.214.245.15:8000',
     'http://0.0.0.0:8000',
     'http://0.0.0.0:8010',
-    'http://0.0.0.0:9000'
+    'http://0.0.0.0:9000',
+    'https://awaited-mule-smiling.ngrok-free.app/auth',
+    'https://awaited-mule-smiling.ngrok-free.app'
 ]
 
 CORS_ALLOW_HEADERS = ['*']
