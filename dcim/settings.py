@@ -163,8 +163,6 @@ CSRF_TRUSTED_ORIGINS = [
     'http://localhost:3011',
     'http://13.214.245.15:8000',
     'http://0.0.0.0:8000',
-    'http://0.0.0.0:8010',
-    'http://127.0.0.1:8010',
 ]
 
 CORS_ALLOW_HEADERS = ['*']

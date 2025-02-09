@@ -21,7 +21,7 @@ gunicorn --chdir=/opt/app \
     --threads=6 \
     --worker-class=gthread \
     --preload \
-    --bind :5000 \
+    --bind :4000 \
     --log-level=info \
     --error-logfile - \
     --access-logfile - \

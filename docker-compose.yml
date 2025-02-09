@@ -16,7 +16,7 @@ services:
       context: .
       dockerfile: Dockerfile
     expose:
-      - 5000
+      - 4000
     env_file:
       - .env
     environment:
@@ -24,8 +24,8 @@ services:
     links:
       - "redis"
     volumes:
-      - staticfiles:/opt/app/static/static_root
-      - mediafiles:/opt/app/media/
+      - dcim_staticfiles:/opt/app/static/static_root
+      - dcim_mediafiles:/opt/app/media/
       - .:/opt/app
     restart: on-failure
     networks:
@@ -67,9 +67,9 @@ services:
       - POSTGRES_PASSWORD=dcim_password
       - POSTGRES_PORT=5432
     ports:
-      - 5433:5432
+      - 5432:5432
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - dcim_postgres_data:/var/lib/postgresql/data
     networks:
       - dcim_network
 
@@ -78,7 +78,7 @@ services:
     container_name: dcim_mongo
     restart: "on-failure"
     ports:
-      - 27018:27017
+      - 27017:27017
     env_file:
       - .env
     environment:
@@ -88,11 +88,11 @@ services:
       - MONGO_INITDB_USERNAME=${MONGO_DB_USERNAME}
       - MONGO_INITDB_PASSWORD=${MONGO_DB_PASSWORD}
     volumes:
-      - mongodb_data_container:/data/db
+      - dcim_mongodb_data:/data/db
     networks:
       - dcim_network
 
-  broker:
+  broker_dcim:
     build:
       context: .
       dockerfile: Dockerfile
@@ -111,18 +111,18 @@ services:
     image: nginx:mainline-alpine
     restart: always
     ports:
-      - "8010:8000"
+      - "8000:8000"
     volumes:
       - ./nginx:/etc/nginx/conf.d
-      - staticfiles:/opt/staticfiles
-      - mediafiles:/opt/mediafiles
+      - dcim_staticfiles:/opt/staticfiles
+      - dcim_mediafiles:/opt/mediafiles
     depends_on:
       - "dcim_backend"
     networks:
       - dcim_network
 
 volumes:
-  staticfiles:
-  mediafiles:
-  mongodb_data_container:
-  postgres_data:
+  dcim_staticfiles:
+  dcim_mediafiles:
+  dcim_mongodb_data:
+  dcim_postgres_data:
