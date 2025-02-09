@@ -1730,3 +1730,4 @@ UnboundLocalError: local variable 'serializer' referenced before assignment
 2025-02-09 14:28:01,564 django.request WARNING  Not Found: /favicon.ico
 2025-02-09 14:37:16,088 django.request WARNING  Not Found: /favicon.ico
 2025-02-09 14:37:38,362 django.security.csrf WARNING  Forbidden (Origin checking failed - http://165.22.221.252:8000 does not match any trusted origins.): /admin/login/
+2025-02-09 14:42:43,892 django.security.csrf WARNING  Forbidden (Origin checking failed - http://165.22.221.252:8000 does not match any trusted origins.): /admin/login/
