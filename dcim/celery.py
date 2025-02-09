@@ -239,6 +239,13 @@ def prepare_last30days_rt_enynow_and_thermohygrometer_data(arg):
                             # temp_rt_mongo_cpm_queryset.delete()
                             # logger.warning(f"TemporaryRTModelCPM {state.topic} data deleted succesfully")
 
+                        if state.topic == 'MQTT_ENY_NOW':
+                            last7days_enynow_mongo_cpm_queryset = Last7DaysEnyNowDataModelCPM.objects.order_by('-created_date', '-created_time')[:2]
+                            data = Last7DaysEnyNowDataModelCPMSerializer(last7days_enynow_mongo_cpm_queryset, many=True).data
+                            date_wise_cpm_enynow_mongo_create(prepare_enynow_data(data), state.device_code, state.topic, ['LAST_30_DAYS'])
+                            # temp_rt_mongo_cpm_queryset.delete()
+                            # logger.warning(f"TemporaryRTModelCPM {state.topic} data deleted succesfully")
+
 
                 if state.device_code.code  == 'ModhumatiBank-ENV_01':
                     if state.time_range == 'LAST_7_DAYS':

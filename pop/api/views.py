@@ -223,15 +223,6 @@ class ThermohygrometerDataViewSet(viewsets.ModelViewSet):
             queryset = queryset.filter(device_code__code=device_code, topic=topic, time_range=time_range)
 
         return queryset
-
-
-    def list(self, request):
-        filtered_queryset = self.filter_queryset(self.get_queryset())
-        if filtered_queryset.exists():
-            serializer = self.get_serializer(filtered_queryset, many=True).data
-
-        return Response(serializer)
-    
     
 
 class MinuteLevelDataView(viewsets.ModelViewSet):
