@@ -1728,3 +1728,5 @@ UnboundLocalError: local variable 'serializer' referenced before assignment
 2025-02-09 14:06:31,010 pop.CPM_RT_mixins INFO     mongo_db = TemporaryRTModelCPM, topic = MQTT_RT_DATA created 67a862077ac6d200dd89d987 succesfully
 2025-02-09 14:06:31,023 pop.CPM_RT_mixins INFO     mongo_db = TodayRTModelCPM, topic = MQTT_RT_DATA created 67a862077ac6d200dd89d988 succesfully
 2025-02-09 14:28:01,564 django.request WARNING  Not Found: /favicon.ico
+2025-02-09 14:37:16,088 django.request WARNING  Not Found: /favicon.ico
+2025-02-09 14:37:38,362 django.security.csrf WARNING  Forbidden (Origin checking failed - http://165.22.221.252:8000 does not match any trusted origins.): /admin/login/
