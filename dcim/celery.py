@@ -214,46 +214,39 @@ def prepare_last30days_rt_enynow_and_thermohygrometer_data(arg):
 
     for pop in POP.objects.filter(is_active=True):
         for device in POPDevice.objects.filter(pop_name=pop.id):
-            # print(device)
             for state in POPDeviceState.objects.filter(device_code=device.id):
-                # print(state.id)
-                # print(state.device_code.code)
-                # print(state)
+                if state.time_range == 'LAST_7_DAYS':
+                    # print(state.time_range)
+                    if(state.topic == 'MQTT_RT_DATA'):
+                        # print(state.topic)
+                        last7days_rt_mongo_cpm_queryset = Last7DaysRTModelCPM.objects.order_by('-created_date', '-created_time')[:3]
+                        data = Last7DaysRTModelCPMSerializer(last7days_rt_mongo_cpm_queryset, many=True).data
+                        date_wise_cpm_rt_mongo_create(prepare_rt_data(data), state.device_code, state.topic, ['LAST_30_DAYS'])
+                        # temp_rt_mongo_cpm_queryset.delete()
+                        # logger.warning(f"TemporaryRTModelCPM {state.topic} data deleted succesfully")
 
-                if state.device_code.code  == '3071523B00003':
-                    # print(state.device_code)
-                    if state.time_range == 'LAST_7_DAYS':
-                        # print(state.time_range)
-                        if(state.topic == 'MQTT_RT_DATA'):
-                            # print(state.topic)
-                            last7days_rt_mongo_cpm_queryset = Last7DaysRTModelCPM.objects.order_by('-created_date', '-created_time')[:3]
-                            data = Last7DaysRTModelCPMSerializer(last7days_rt_mongo_cpm_queryset, many=True).data
-                            date_wise_cpm_rt_mongo_create(prepare_rt_data(data), state.device_code, state.topic, ['LAST_30_DAYS'])
-                            # temp_rt_mongo_cpm_queryset.delete()
-                            # logger.warning(f"TemporaryRTModelCPM {state.topic} data deleted succesfully")
+                    if state.topic == 'MQTT_ENY_NOW':
+                        last7days_enynow_mongo_cpm_queryset = Last7DaysEnyNowDataModelCPM.objects.order_by('-created_date', '-created_time')[:2]
+                        data = Last7DaysEnyNowDataModelCPMSerializer(last7days_enynow_mongo_cpm_queryset, many=True).data
+                        date_wise_cpm_enynow_mongo_create(prepare_enynow_data(data), state.device_code, state.topic, ['LAST_30_DAYS'])
+                        # temp_rt_mongo_cpm_queryset.delete()
+                        # logger.warning(f"TemporaryRTModelCPM {state.topic} data deleted succesfully")
 
-                        if state.topic == 'MQTT_ENY_NOW':
-                            last7days_enynow_mongo_cpm_queryset = Last7DaysEnyNowDataModelCPM.objects.order_by('-created_date', '-created_time')[:2]
-                            data = Last7DaysEnyNowDataModelCPMSerializer(last7days_enynow_mongo_cpm_queryset, many=True).data
-                            date_wise_cpm_enynow_mongo_create(prepare_enynow_data(data), state.device_code, state.topic, ['LAST_30_DAYS'])
-                            # temp_rt_mongo_cpm_queryset.delete()
-                            # logger.warning(f"TemporaryRTModelCPM {state.topic} data deleted succesfully")
-
-                        if state.topic == 'MQTT_ENY_NOW':
-                            last7days_enynow_mongo_cpm_queryset = Last7DaysEnyNowDataModelCPM.objects.order_by('-created_date', '-created_time')[:2]
-                            data = Last7DaysEnyNowDataModelCPMSerializer(last7days_enynow_mongo_cpm_queryset, many=True).data
-                            date_wise_cpm_enynow_mongo_create(prepare_enynow_data(data), state.device_code, state.topic, ['LAST_30_DAYS'])
-                            # temp_rt_mongo_cpm_queryset.delete()
-                            # logger.warning(f"TemporaryRTModelCPM {state.topic} data deleted succesfully")
+                    if state.topic == 'MQTT_ENY_NOW':
+                        last7days_enynow_mongo_cpm_queryset = Last7DaysEnyNowDataModelCPM.objects.order_by('-created_date', '-created_time')[:2]
+                        data = Last7DaysEnyNowDataModelCPMSerializer(last7days_enynow_mongo_cpm_queryset, many=True).data
+                        date_wise_cpm_enynow_mongo_create(prepare_enynow_data(data), state.device_code, state.topic, ['LAST_30_DAYS'])
+                        # temp_rt_mongo_cpm_queryset.delete()
+                        # logger.warning(f"TemporaryRTModelCPM {state.topic} data deleted succesfully")
 
 
-                        if(state.topic == 'DCIM/ModhumatiBank/ENV_01'):
-                            # print(state.topic)
-                            last7days_thermohygrometer_queryset = Last7DaysThermoHygrometerMongoModel.objects.order_by('-created_date', '-created_time')[:3]
-                            data = Last7DaysThermoHygrometerMongoModelSerializer(last7days_thermohygrometer_queryset, many=True).data
-                            date_wise_thermohygrometer_create(prepare_thermohygrometer_data(data), state.device_code, state.topic, ['LAST_30_DAYS'])
-                            # temp_rt_mongo_cpm_queryset.delete()
-                            # logger.warning(f"TemporaryRTModelCPM {state.topic} data deleted succesfully")
+                    if(state.topic == 'DCIM/ModhumatiBank/ENV_01'):
+                        # print(state.topic)
+                        last7days_thermohygrometer_queryset = Last7DaysThermoHygrometerMongoModel.objects.order_by('-created_date', '-created_time')[:3]
+                        data = Last7DaysThermoHygrometerMongoModelSerializer(last7days_thermohygrometer_queryset, many=True).data
+                        date_wise_thermohygrometer_create(prepare_thermohygrometer_data(data), state.device_code, state.topic, ['LAST_30_DAYS'])
+                        # temp_rt_mongo_cpm_queryset.delete()
+                        # logger.warning(f"TemporaryRTModelCPM {state.topic} data deleted succesfully")
                     
 
 
@@ -275,35 +268,29 @@ def prepare_this_year_rt_enynow_and_thermohygrometer_data(arg):
         for device in POPDevice.objects.filter(pop_name=pop.id):
             # print(device)
             for state in POPDeviceState.objects.filter(device_code=device.id):
-                # print(state.id)
-                # print(state.device_code.code)
-                # print(state)
+                if state.time_range == 'LAST_30_DAYS':
+                    # print(state.date)
+                    if(state.topic == 'MQTT_RT_DATA'):
+                        # print(state.topic)
+                        last30days_rt_mongo_cpm_queryset = Last30DaysRTModelCPM.objects.order_by('-created_date', '-created_time')[:12]
+                        data = Last30DaysRTModelCPMSerializer(last30days_rt_mongo_cpm_queryset, many=True).data
+                        date_wise_cpm_rt_mongo_create(prepare_rt_data(data), state.device_code, state.topic, ['THIS_YEAR'])
+                        # temp_rt_mongo_cpm_queryset.delete()
+                        # logger.warning(f"TemporaryRTModelCPM {state.topic} data deleted succesfully")
 
-                if state.device_code.code  == '3071523B00003':
-                    # print(state.device_code)
-                    if state.time_range == 'LAST_30_DAYS':
-                        # print(state.date)
-                        if(state.topic == 'MQTT_RT_DATA'):
-                            # print(state.topic)
-                            last30days_rt_mongo_cpm_queryset = Last30DaysRTModelCPM.objects.order_by('-created_date', '-created_time')[:12]
-                            data = Last30DaysRTModelCPMSerializer(last30days_rt_mongo_cpm_queryset, many=True).data
-                            date_wise_cpm_rt_mongo_create(prepare_rt_data(data), state.device_code, state.topic, ['THIS_YEAR'])
-                            # temp_rt_mongo_cpm_queryset.delete()
-                            # logger.warning(f"TemporaryRTModelCPM {state.topic} data deleted succesfully")
+                    if state.topic == 'MQTT_ENY_NOW':
+                        last30days_enynow_mongo_cpm_queryset = Last30DaysEnyNowDataModelCPM.objects.order_by('-created_date', '-created_time')[:12]
+                        data = Last30DaysEnyNowDataModelCPMSerializer(last30days_enynow_mongo_cpm_queryset, many=True).data
+                        date_wise_cpm_enynow_mongo_create(prepare_enynow_data(data), state.device_code, state.topic, ['THIS_YEAR'])
+                        # temp_rt_mongo_cpm_queryset.delete()
+                        # logger.warning(f"TemporaryRTModelCPM {state.topic} data deleted succesfully")
 
-                        if state.topic == 'MQTT_ENY_NOW':
-                            last30days_enynow_mongo_cpm_queryset = Last30DaysEnyNowDataModelCPM.objects.order_by('-created_date', '-created_time')[:12]
-                            data = Last30DaysEnyNowDataModelCPMSerializer(last30days_enynow_mongo_cpm_queryset, many=True).data
-                            date_wise_cpm_enynow_mongo_create(prepare_enynow_data(data), state.device_code, state.topic, ['THIS_YEAR'])
-                            # temp_rt_mongo_cpm_queryset.delete()
-                            # logger.warning(f"TemporaryRTModelCPM {state.topic} data deleted succesfully")
-
-            
-                        if(state.topic == 'DCIM/ModhumatiBank/ENV_01'):
-                            # print(state.topic)
-                            last30days_thermohygrometer_queryset = Last30DaysThermoHygrometerMongoModel.objects.order_by('-created_date', '-created_time')[:12]
-                            data = Last30DaysThermoHygrometerMongoModelSerializer(last30days_thermohygrometer_queryset, many=True).data
-                            date_wise_thermohygrometer_create(prepare_thermohygrometer_data(data), state.device_code, state.topic, ['THIS_YEAR'])
-                            # temp_rt_mongo_cpm_queryset.delete()
-                            # logger.warning(f"TemporaryRTModelCPM {state.topic} data deleted succesfully")
+        
+                    if(state.topic == 'DCIM/ModhumatiBank/ENV_01'):
+                        # print(state.topic)
+                        last30days_thermohygrometer_queryset = Last30DaysThermoHygrometerMongoModel.objects.order_by('-created_date', '-created_time')[:12]
+                        data = Last30DaysThermoHygrometerMongoModelSerializer(last30days_thermohygrometer_queryset, many=True).data
+                        date_wise_thermohygrometer_create(prepare_thermohygrometer_data(data), state.device_code, state.topic, ['THIS_YEAR'])
+                        # temp_rt_mongo_cpm_queryset.delete()
+                        # logger.warning(f"TemporaryRTModelCPM {state.topic} data deleted succesfully")
  
