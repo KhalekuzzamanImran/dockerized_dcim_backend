@@ -1,0 +1,2 @@
+2025-02-11 14:16:46,041 django.request WARNING  Not Found: /favicon.ico
+2025-02-11 14:19:59,921 django.security.csrf WARNING  Forbidden (Origin checking failed - http://localhost:8000 does not match any trusted origins.): /admin/login/

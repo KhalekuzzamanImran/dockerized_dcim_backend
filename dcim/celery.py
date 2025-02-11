@@ -190,7 +190,7 @@ def prepare_last7days_rt_and_thermohygrometer_data(arg):
                         temp_rt_mongo_cpm_queryset.delete()
                         logger.warning(f"TemporaryRTModelCPM {state.topic} data deleted succesfully")
 
-                    if state.topic == 'devices/ModhumatiBank/ENV_01':
+                    if state.topic == 'DCIM/ModhumatiBank/ENV_01':
                         temp_thermohygro_mongo_queryset = TempThermoHygrometerMongoModel.objects.all()
                         data = TempThermoHygrometerMongoModelSerializer(temp_thermohygro_mongo_queryset, many=True).data
                         date_wise_thermohygrometer_create(prepare_thermohygrometer_data(data), state.device_code, state.topic, ['LAST_7_DAYS'])
@@ -247,9 +247,7 @@ def prepare_last30days_rt_enynow_and_thermohygrometer_data(arg):
                             # logger.warning(f"TemporaryRTModelCPM {state.topic} data deleted succesfully")
 
 
-                if state.device_code.code  == 'ModhumatiBank-ENV_01':
-                    if state.time_range == 'LAST_7_DAYS':
-                        if(state.topic == 'devices/ModhumatiBank/ENV_01'):
+                        if(state.topic == 'DCIM/ModhumatiBank/ENV_01'):
                             # print(state.topic)
                             last7days_thermohygrometer_queryset = Last7DaysThermoHygrometerMongoModel.objects.order_by('-created_date', '-created_time')[:3]
                             data = Last7DaysThermoHygrometerMongoModelSerializer(last7days_thermohygrometer_queryset, many=True).data
@@ -300,10 +298,8 @@ def prepare_this_year_rt_enynow_and_thermohygrometer_data(arg):
                             # temp_rt_mongo_cpm_queryset.delete()
                             # logger.warning(f"TemporaryRTModelCPM {state.topic} data deleted succesfully")
 
-               
-                if state.device_code.code  == 'ModhumatiBank-ENV_01':
-                    if state.time_range == 'LAST_30_DAYS':
-                        if(state.topic == 'devices/ModhumatiBank/ENV_01'):
+            
+                        if(state.topic == 'DCIM/ModhumatiBank/ENV_01'):
                             # print(state.topic)
                             last30days_thermohygrometer_queryset = Last30DaysThermoHygrometerMongoModel.objects.order_by('-created_date', '-created_time')[:12]
                             data = Last30DaysThermoHygrometerMongoModelSerializer(last30days_thermohygrometer_queryset, many=True).data
