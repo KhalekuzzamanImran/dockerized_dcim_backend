@@ -11,7 +11,7 @@ class DataItem(models.Model):
 
 class UpsModel(models.Model):
     _id = models.ObjectIdField(primary_key=True)
-    timestamp = models.DateTimeField()
+    timestamp = models.CharField(max_length=30)
     data = models.JSONField()  # Use JSONField to store raw data
 
     objects = models.DjongoManager()

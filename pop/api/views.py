@@ -398,33 +398,44 @@ class MinuteLevelDataView(viewsets.ModelViewSet):
 class UpsDataViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = UpsModelSerializer
 
+
     def get_queryset(self):
         queryset = UpsModel.objects.using("nonrel").all()
-        print("Count from Django ORM:", queryset.count())
+        print("Count from Django ORM (before filtering):", queryset.count())
 
         time_range = self.request.query_params.get('time_range', None)
-        print(time_range)
+        print("Time range:", time_range)
 
         if time_range:
             now = timezone.now()
 
             if time_range == 'TODAY':
-                start_time = timezone.make_aware(timezone.datetime(now.year, now.month, now.day, 0, 0, 0))
+                start_time = timezone.datetime(now.year, now.month, now.day, 0, 0, 0, tzinfo=timezone.utc)
             elif time_range == "LAST_7_DAYS":
                 start_time = now - timedelta(days=7)
             elif time_range == "LAST_30_DAYS":
                 start_time = now - timedelta(days=30)
             elif time_range == "THIS_YEAR":
-                start_time = timezone.make_aware(timezone.datetime(now.year, 1, 1))
+                start_time = timezone.datetime(now.year, 1, 1, tzinfo=timezone.utc)
             else:
-                return queryset 
+                return queryset
 
-            print("Start Time (Datetime Object):", start_time)  # Debugging
-            queryset = queryset.filter(timestamp__gte=start_time)  # Use datetime object
+            # Convert start_time to ISO 8601 format without timezone (to match MongoDB format)
+            start_time_iso = start_time.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3]  # Remove timezone and trim microseconds
+            print("Start time (ISO format without timezone):", start_time_iso)
 
+            # Debug: Print the first few timestamps from MongoDB
+            print("First few timestamps from MongoDB:", queryset[:5].values_list('timestamp', flat=True))
+
+            # Filter queryset where timestamp is greater than or equal to start_time_iso
+            queryset = queryset.filter(timestamp__gte=start_time_iso)
+
+        print("Count from Django ORM (after filtering):", queryset.count())
         return queryset
+
 
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
         serializer = self.get_serializer(queryset, many=True)
+
         return Response(serializer.data)
