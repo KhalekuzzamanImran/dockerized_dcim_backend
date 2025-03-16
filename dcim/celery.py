@@ -42,11 +42,6 @@ def setup_periodic_tasks(sender, **kwargs):
         prepare_this_year_rt_enynow_and_thermohygrometer_data.s('all_rang'),
     )
 
-    sender.add_periodic_task(
-        crontab(minute=0, hour='*/6'),
-        prepare_this_year_rt_enynow_and_thermohygrometer_data.s('all_rang'),
-    )
-
 
 
 def prepare_rt_data(data):
@@ -146,11 +141,69 @@ def prepare_thermohygrometer_data(data):
     return statistics
 
 
+def prepare_cccl_generator_data(data):
+    import numpy as np
+
+    item = {
+        'ua': 0,
+        'ub': 0,
+        'uc': 0,
+        'ia': 0,
+        'ib': 0,
+        'ic': 0,
+        'pa': 0,
+        'pb': 0,
+        'pc': 0,
+        'zyggl': 0,
+        'pfa': 0,
+        'pfb': 0,
+        'pfc': 0,
+        'zglys': 0,
+        'f': 0,
+    }
+
+    statistics = {}
+    # Loop through each variable and calculate statistics
+    for variable in item.keys():  # Assuming all data points have the same keys
+        values = []
+        for entry in data:
+            if entry.get(variable, None) is not None:
+                values.append(entry.get(variable))
+        statistics[variable] = np.mean(values) if len(values) > 0 else None
+    return statistics
+
+
+def prepare_cccl_environment_data(data):
+    import numpy as np
+
+    item = {
+      "pm1_0_ug_m3": 0,
+      "pm2_5_ug_m3": 0,
+      "pm10_0_ug_m3": 0,
+      "hum_percent": 0,
+      "temp_1_c": 0,
+      "dp_c": 0,
+    }
+
+    statistics = {}
+    # Loop through each variable and calculate statistics
+    for variable in item.keys():  # Assuming all data points have the same keys
+        values = []
+        for entry in data:
+            if entry.get(variable) is not None:
+                values.append(entry.get(variable))
+        statistics[variable] = np.mean(values) if len(values) > 0 else None
+    return statistics
+
+
+
 @app.task
 def delete_today_cpm_rt_and_enynow_data(arg):
     from pop.CPM_RT_mongo_models import TodayRTModelCPM
     from pop.CPM_ENY_NOW_mongo_models import TodayEnyNowDataModelCPM
     from pop.thermohygrometer_modhumati_models import TodayThermoHygrometerMongoModel
+    from pop.CCCL_environment_mongo_model import TodayCCCLEnvironment
+    from pop.CCCL_generator_mongo_model import TodayCCCLGenerator
 
     today_cpm_rt_data_queryset = TodayRTModelCPM.objects.all()
     today_cpm_rt_data_queryset.delete()
@@ -164,6 +217,14 @@ def delete_today_cpm_rt_and_enynow_data(arg):
     today_thermohygrometer_data_queryset.delete()
     logger.warning(f"TodayThermoHygrometerMongoModel data deleted succesfully")
 
+    today_cccl_env_queryset = TodayCCCLEnvironment.objects.all()
+    today_cccl_env_queryset.delete()
+    logger.warning(f"TodayCCCLEnvironment data deleted succesfully")
+
+    today_cccl_generator_queryset = TodayCCCLGenerator.objects.all()
+    today_cccl_generator_queryset.delete()
+    logger.warning(f"TodayCCCLGenerator data deleted succesfully")
+
   
 
 @app.task
@@ -175,6 +236,14 @@ def prepare_last7days_rt_and_thermohygrometer_data(arg):
     from pop.thermohygrometer_modhumati_models import TempThermoHygrometerMongoModel
     from pop.api.serializers import TempThermoHygrometerMongoModelSerializer
     from pop.thermohygrometer_modhumati_mixins import date_wise_thermohygrometer_create
+
+    from pop.CCCL_environment_mongo_model import TemporaryCCCLEnvironment
+    from pop.api.serializers import TemporaryCCCLEnvironmentSerializer
+    from pop.CCCL_environment_mixins import date_wise_cccl_env_mongo_create
+
+    from pop.CCCL_generator_mongo_model import TemporaryCCCLGenerator
+    from pop.api.serializers import TemporaryCCCLGeneratorSerializer
+    from pop.CCCL_generator_mixins import date_wise_cccl_generator_mongo_create
 
     from pop.models import POPDeviceState, POP, POPDevice
 
@@ -190,12 +259,26 @@ def prepare_last7days_rt_and_thermohygrometer_data(arg):
                         temp_rt_mongo_cpm_queryset.delete()
                         logger.warning(f"TemporaryRTModelCPM {state.topic} data deleted succesfully")
 
-                    if state.topic == 'DCIM/ModhumatiBank/ENV_01':
+                    if state.topic == 'DCIM/COLOCITY/ENV_01':
                         temp_thermohygro_mongo_queryset = TempThermoHygrometerMongoModel.objects.all()
                         data = TempThermoHygrometerMongoModelSerializer(temp_thermohygro_mongo_queryset, many=True).data
                         date_wise_thermohygrometer_create(prepare_thermohygrometer_data(data), state.device_code, state.topic, ['LAST_7_DAYS'])
                         temp_thermohygro_mongo_queryset.delete()
                         logger.warning(f"TempThermoHygrometerMongoModel {state.topic} data deleted succesfully")
+
+                    if state.topic == 'CCCL/PURBACHAL/ENV_01':
+                        cccl_env_queryset = TemporaryCCCLEnvironment.objects.all()
+                        data = TemporaryCCCLEnvironmentSerializer(cccl_env_queryset, many=True).data
+                        date_wise_cccl_env_mongo_create(prepare_cccl_environment_data(data), state.device_code, state.topic, ['LAST_7_DAYS'])
+                        cccl_env_queryset.delete()
+                        logger.warning(f"TemporaryCCCLEnvironment {state.topic} data deleted succesfully")
+
+                    if state.topic == 'CCCL/PURBACHAL/ENM_01':
+                        cccl_generator_queryset = TemporaryCCCLGenerator.objects.all()
+                        data = TemporaryCCCLGeneratorSerializer(cccl_generator_queryset, many=True).data
+                        date_wise_cccl_generator_mongo_create(prepare_cccl_generator_data(data), state.device_code, state.topic, ['LAST_7_DAYS'])
+                        cccl_generator_queryset.delete()
+                        logger.warning(f"TemporaryCCCLGenerator {state.topic} data deleted succesfully")
 
 
 @app.task
@@ -209,6 +292,14 @@ def prepare_last30days_rt_enynow_and_thermohygrometer_data(arg):
     from pop.thermohygrometer_modhumati_models import Last7DaysThermoHygrometerMongoModel
     from pop.api.serializers import Last7DaysThermoHygrometerMongoModelSerializer
     from pop.thermohygrometer_modhumati_mixins import date_wise_thermohygrometer_create
+
+    from pop.CCCL_environment_mongo_model import Last7DaysCCCLEnvironment
+    from pop.api.serializers import Last7DaysCCCLEnvironmentSerializer
+    from pop.CCCL_environment_mixins import date_wise_cccl_env_mongo_create
+
+    from pop.CCCL_generator_mongo_model import Last7DaysCCCLGenerator
+    from pop.api.serializers import Last7DaysCCCLGeneratorSerializer
+    from pop.CCCL_generator_mixins import date_wise_cccl_generator_mongo_create
     
     from pop.models import POPDeviceState, POP, POPDevice
 
@@ -240,13 +331,27 @@ def prepare_last30days_rt_enynow_and_thermohygrometer_data(arg):
                         # logger.warning(f"TemporaryRTModelCPM {state.topic} data deleted succesfully")
 
 
-                    if(state.topic == 'DCIM/ModhumatiBank/ENV_01'):
+                    if(state.topic == 'DCIM/COLOCITY/ENV_01'):
                         # print(state.topic)
                         last7days_thermohygrometer_queryset = Last7DaysThermoHygrometerMongoModel.objects.order_by('-created_date', '-created_time')[:3]
                         data = Last7DaysThermoHygrometerMongoModelSerializer(last7days_thermohygrometer_queryset, many=True).data
                         date_wise_thermohygrometer_create(prepare_thermohygrometer_data(data), state.device_code, state.topic, ['LAST_30_DAYS'])
                         # temp_rt_mongo_cpm_queryset.delete()
                         # logger.warning(f"TemporaryRTModelCPM {state.topic} data deleted succesfully")
+
+                    if state.topic == 'CCCL/PURBACHAL/ENV_01':
+                        cccl_env_queryset = Last7DaysCCCLEnvironment.objects.all()
+                        data = Last7DaysCCCLEnvironmentSerializer(cccl_env_queryset, many=True).data
+                        date_wise_cccl_env_mongo_create(prepare_cccl_environment_data(data), state.device_code, state.topic, ['LAST_30_DAYS'])
+                        # cccl_env_queryset.delete()
+                        # logger.warning(f"Last7DaysCCCLEnvironment {state.topic} data deleted succesfully")
+
+                    if state.topic == 'CCCL/PURBACHAL/ENM_01':
+                        cccl_generator_queryset = Last7DaysCCCLGenerator.objects.all()
+                        data = Last7DaysCCCLGeneratorSerializer(cccl_generator_queryset, many=True).data
+                        date_wise_cccl_generator_mongo_create(prepare_cccl_generator_data(data), state.device_code, state.topic, ['LAST_30_DAYS'])
+                        # cccl_generator_queryset.delete()
+                        # logger.warning(f"Last7DaysCCCLGenerator {state.topic} data deleted succesfully")
                     
 
 
@@ -261,6 +366,14 @@ def prepare_this_year_rt_enynow_and_thermohygrometer_data(arg):
     from pop.thermohygrometer_modhumati_models import Last30DaysThermoHygrometerMongoModel
     from pop.api.serializers import Last30DaysThermoHygrometerMongoModelSerializer
     from pop.thermohygrometer_modhumati_mixins import date_wise_thermohygrometer_create
+
+    from pop.CCCL_environment_mongo_model import Last30DaysCCCLEnvironment
+    from pop.api.serializers import Last30DaysCCCLEnvironmentSerializer
+    from pop.CCCL_environment_mixins import date_wise_cccl_env_mongo_create
+
+    from pop.CCCL_generator_mongo_model import Last30DaysCCCLGenerator
+    from pop.api.serializers import Last30DaysCCCLGeneratorSerializer
+    from pop.CCCL_generator_mixins import date_wise_cccl_generator_mongo_create
 
     from pop.models import POPDeviceState, POP, POPDevice
 
@@ -286,11 +399,25 @@ def prepare_this_year_rt_enynow_and_thermohygrometer_data(arg):
                         # logger.warning(f"TemporaryRTModelCPM {state.topic} data deleted succesfully")
 
         
-                    if(state.topic == 'DCIM/ModhumatiBank/ENV_01'):
+                    if(state.topic == 'DCIM/COLOCITY/ENV_01'):
                         # print(state.topic)
                         last30days_thermohygrometer_queryset = Last30DaysThermoHygrometerMongoModel.objects.order_by('-created_date', '-created_time')[:12]
                         data = Last30DaysThermoHygrometerMongoModelSerializer(last30days_thermohygrometer_queryset, many=True).data
                         date_wise_thermohygrometer_create(prepare_thermohygrometer_data(data), state.device_code, state.topic, ['THIS_YEAR'])
                         # temp_rt_mongo_cpm_queryset.delete()
                         # logger.warning(f"TemporaryRTModelCPM {state.topic} data deleted succesfully")
+
+                    if state.topic == 'CCCL/PURBACHAL/ENV_01':
+                        cccl_env_queryset = Last30DaysCCCLEnvironment.objects.all()
+                        data = Last30DaysCCCLEnvironmentSerializer(cccl_env_queryset, many=True).data
+                        date_wise_cccl_env_mongo_create(prepare_cccl_environment_data(data), state.device_code, state.topic, ['THIS_YEAR'])
+                        # cccl_env_queryset.delete()
+                        # logger.warning(f"Last7DaysCCCLEnvironment {state.topic} data deleted succesfully")
+
+                    if state.topic == 'CCCL/PURBACHAL/ENM_01':
+                        cccl_generator_queryset = Last30DaysCCCLGenerator.objects.all()
+                        data = Last30DaysCCCLGeneratorSerializer(cccl_generator_queryset, many=True).data
+                        date_wise_cccl_generator_mongo_create(prepare_cccl_generator_data(data), state.device_code, state.topic, ['THIS_YEAR'])
+                        # cccl_generator_queryset.delete()
+                        # logger.warning(f"Last7DaysCCCLGenerator {state.topic} data deleted succesfully")
  

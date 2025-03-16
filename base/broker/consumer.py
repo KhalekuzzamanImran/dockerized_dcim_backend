@@ -4,7 +4,7 @@ import os
 import sys
 import time 
 
-
+temp = 0
 count = 0
 rt_data = []
 eny_data = []
@@ -23,6 +23,9 @@ from pop.CPM_DAY_DATA_mongo_mixins import day_data_mongo_create
 from pop.CPM_ENY_FRZ_mongo_mixins import eny_frz_mongo_create
 from pop.CPM_ENY_NOW_mongo_mixins import eny_now_mongo_create
 from pop.thermohygrometer_modhumati_mixins import thermohygrometer_mongo_create
+
+from pop.CCCL_generator_mixins import cccl_enm_mongo_create
+from pop.CCCL_environment_mixins import cccl_env_mongo_create
 
 from paho.mqtt import client as mqtt_client
 from decouple import config
@@ -74,8 +77,9 @@ def connect_mqtt() -> mqtt_client:
 def subscribe(client: mqtt_client):
     
     def on_message(client, userdata, msg):
-        global count
+        global count, temp
         global rt_data, eny_data
+        flag = True
         # print(f"Received `{msg.payload.decode()}` from `{msg.topic}` topic")
 
         try:
@@ -88,6 +92,7 @@ def subscribe(client: mqtt_client):
                     
                 if(int(data['isend']) == 1):
                     count = 0
+                    # print(rt_data)
                     rt_mongo_create(rt_data, msg.topic)
                     rt_data = []
 
@@ -105,9 +110,24 @@ def subscribe(client: mqtt_client):
             elif (msg.topic == 'MQTT_ENY_FRZ'):
                 eny_frz_mongo_create(data, msg.topic)
 
-            elif (msg.topic == 'DCIM/ModhumatiBank/ENV_01'):
+            elif (msg.topic == 'DCIM/COLOCITY/ENV_01'):
                 thermohygrometer_mongo_create(data, msg.topic)
                 
+            # Purbachol Cadet College(Green Power)
+            elif (msg.topic == 'CCCL/PURBACHAL/ENV_01'):
+                cccl_env_mongo_create(data, msg.topic)
+            
+            elif (msg.topic == 'CCCL/PURBACHAL/ENM_01'):
+
+                if temp == 0:
+                    # print(data)
+                    cccl_enm_mongo_create(data, msg.topic)
+                    temp = data.get('data')[0].get('tp')
+                    # print(temp)
+
+                elif temp == data.get('data')[0].get('tp'):
+                    # print('Data has been already processed')
+                    temp = 0
 
         except Exception as error:
             raise error

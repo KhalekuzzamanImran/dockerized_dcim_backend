@@ -3,6 +3,8 @@ from pop.models import POP, POPDevice, POPDeviceState
 from pop.CPM_RT_mongo_models import RTModelCPM, TemporaryRTModelCPM, TodayRTModelCPM, Last7DaysRTModelCPM, Last30DaysRTModelCPM, ThisYearRTModelCPM
 from pop.CPM_ENY_NOW_mongo_models import EnyNowDataModelCPM, TemporaryEnyNowDataModelCPM, TodayEnyNowDataModelCPM, Last7DaysEnyNowDataModelCPM, Last30DaysEnyNowDataModelCPM, ThisYearEnyNowDataModelCPM
 from pop.thermohygrometer_modhumati_models import ThermoHygrometerMongoModel, TempThermoHygrometerMongoModel, TodayThermoHygrometerMongoModel, Last7DaysThermoHygrometerMongoModel, Last30DaysThermoHygrometerMongoModel, ThisYearThermoHygrometerMongoModel
+from pop.CCCL_generator_mongo_model import CCCLGenerator, TemporaryCCCLGenerator, TodayCCCLGenerator, Last7DaysCCCLGenerator, Last30DaysCCCLGenerator, ThisYearCCCLGenerator
+from pop.CCCL_environment_mongo_model import CCCLEnvironment, TemporaryCCCLEnvironment, TodayCCCLEnvironment, Last7DaysCCCLEnvironment, Last30DaysCCCLEnvironment, ThisYearCCCLEnvironment
 import datetime
 import calendar
 
@@ -169,6 +171,87 @@ class ThisYearThermoHygrometerMongoModelSerializer(DynamicFieldsModelSerializer)
         fields = '__all__'
 
 
+# CCCL Serializer
+class CCCLGeneratorSerializer(DynamicFieldsModelSerializer):
+
+    class Meta:
+        model = CCCLGenerator
+        fields = '__all__'
+
+class TemporaryCCCLGeneratorSerializer(DynamicFieldsModelSerializer):
+
+    class Meta:
+        model = TemporaryCCCLGenerator
+        fields = '__all__'
+
+
+class TodayCCCLGeneratorSerializer(DynamicFieldsModelSerializer):
+
+    class Meta:
+        model = TodayCCCLGenerator
+        fields = '__all__'
+
+
+class Last7DaysCCCLGeneratorSerializer(DynamicFieldsModelSerializer):
+
+    class Meta:
+        model = Last7DaysCCCLGenerator
+        fields = '__all__'
+
+
+class Last30DaysCCCLGeneratorSerializer(DynamicFieldsModelSerializer):
+
+    class Meta:
+        model = Last30DaysCCCLGenerator
+        fields = '__all__'
+
+
+class ThisYearCCCLGeneratorSerializer(DynamicFieldsModelSerializer):
+
+    class Meta:
+        model = ThisYearCCCLGenerator
+        fields = '__all__'
+
+
+class CCCLEnvironmentSerializer(DynamicFieldsModelSerializer):
+
+    class Meta:
+        model = CCCLEnvironment
+        fields = '__all__'
+
+class TemporaryCCCLEnvironmentSerializer(DynamicFieldsModelSerializer):
+
+    class Meta:
+        model = TemporaryCCCLEnvironment
+        fields = '__all__'
+
+
+class TodayCCCLEnvironmentSerializer(DynamicFieldsModelSerializer):
+
+    class Meta:
+        model = TodayCCCLEnvironment
+        fields = '__all__'
+
+
+class Last7DaysCCCLEnvironmentSerializer(DynamicFieldsModelSerializer):
+
+    class Meta:
+        model = Last7DaysCCCLEnvironment
+        fields = '__all__'
+
+
+class Last30DaysCCCLEnvironmentSerializer(DynamicFieldsModelSerializer):
+
+    class Meta:
+        model = Last30DaysCCCLEnvironment
+        fields = '__all__'
+
+
+class ThisYearCCCLEnvironmentSerializer(DynamicFieldsModelSerializer):
+
+    class Meta:
+        model = ThisYearCCCLEnvironment
+        fields = '__all__'
 
 # POP device state serializer
         
@@ -177,6 +260,44 @@ class POPDeviceStatesSerializer(DynamicFieldsModelSerializer):
     class Meta:
         model = POPDeviceState
         fields = '__all__'  # Include all fields by default
+
+
+class LatestCCCLGeneratorDataSerializer(DynamicFieldsModelSerializer):
+
+    class Meta:
+        model = POPDeviceState
+        exclude = ['data', 'created_at', 'updated_at']
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        try:
+            queryset = TodayCCCLGenerator.objects.all()
+            data['latest'] = TodayCCCLGeneratorSerializer(queryset.last(), many=False).data
+            # data['today'] = TodayRTModelCPMSerializer(queryset, many=True).data
+            
+        except:
+            data = []
+
+        return data
+    
+
+class LatestCCCLEnvironmentDataSerializer(DynamicFieldsModelSerializer):
+
+    class Meta:
+        model = POPDeviceState
+        exclude = ['data', 'created_at', 'updated_at']
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        try:
+            queryset = TodayCCCLEnvironment.objects.all()
+            data['latest'] = TodayCCCLEnvironmentSerializer(queryset.last(), many=False).data
+            # data['today'] = TodayRTModelCPMSerializer(queryset, many=True).data
+            
+        except:
+            data = []
+
+        return data
 
 
 class LatestRTDataSerializer(DynamicFieldsModelSerializer):
@@ -276,6 +397,86 @@ class CPMDataSerializer(DynamicFieldsModelSerializer):
         return data
     
 
+class CCCLGeneratorSerializer(DynamicFieldsModelSerializer):
+
+    class Meta:
+        model = POPDeviceState
+        exclude = ['data', 'updated_at']
+
+    def to_representation(self, instance):
+        data = []
+
+        if (instance.device_code.code == 'GREEN_POWER_GENERATOR'):
+            if (instance.topic == 'CCCL/PURBACHAL/ENM_01'):
+                
+                data = super().to_representation(instance)
+                if instance.time_range == 'TODAY':
+                    mongo_queryset = TodayCCCLGenerator.objects.all()
+                    data['latest'] = TodayCCCLGeneratorSerializer(mongo_queryset.last(), many=False).data
+                    data['data'] = TodayCCCLGeneratorSerializer(mongo_queryset, many=True).data
+
+                elif instance.time_range == 'LAST_7_DAYS':
+
+                    mongo_queryset = Last7DaysCCCLGenerator.objects.all()
+                    data['latest'] = Last7DaysCCCLGeneratorSerializer(mongo_queryset.last(), many=False).data
+                    data['data'] = Last7DaysCCCLGeneratorSerializer(mongo_queryset, many=True).data
+
+                elif instance.time_range == 'LAST_30_DAYS':
+
+                    mongo_queryset = Last30DaysCCCLGenerator.objects.all()
+                    data['latest'] = Last30DaysCCCLGeneratorSerializer(mongo_queryset.last(), many=False).data
+                    data['data'] = Last30DaysCCCLGeneratorSerializer(mongo_queryset, many=True).data
+
+                elif instance.time_range == 'THIS_YEAR': 
+                    mongo_queryset = TodayCCCLGenerator.objects.all()
+                    data['latest'] = TodayCCCLGeneratorSerializer(mongo_queryset.last(), many=False).data
+                    data['data'] = TodayCCCLGeneratorSerializer(mongo_queryset, many=True).data
+
+
+        return data
+    
+
+class CCCLEnvironmentSerializer(DynamicFieldsModelSerializer):
+
+    class Meta:
+        model = POPDeviceState
+        exclude = ['data', 'updated_at']
+
+    def to_representation(self, instance):
+        data = []
+
+        if (instance.device_code.code == 'GREEN_POWER_THERMOHYGROMETER'):
+            if (instance.topic == 'CCCL/PURBACHAL/ENV_01'):
+
+                data = super().to_representation(instance)
+                if instance.time_range == 'TODAY':
+
+                    mongo_queryset = TodayCCCLEnvironment.objects.all()
+                    data['latest'] = TodayCCCLEnvironmentSerializer(mongo_queryset.last(), many=False).data
+                    data['data'] = TodayCCCLEnvironmentSerializer(mongo_queryset, many=True).data
+
+                elif instance.time_range == 'LAST_7_DAYS':
+
+                    mongo_queryset = Last7DaysCCCLEnvironment.objects.all()
+                    data['latest'] = Last7DaysCCCLEnvironmentSerializer(mongo_queryset.last(), many=False).data
+                    data['data'] = Last7DaysCCCLEnvironmentSerializer(mongo_queryset, many=True).data
+
+                elif instance.time_range == 'LAST_30_DAYS':
+
+                    mongo_queryset = Last30DaysCCCLEnvironment.objects.all()
+                    data['latest'] = Last30DaysCCCLEnvironmentSerializer(mongo_queryset.last(), many=False).data
+                    data['data'] = Last30DaysCCCLEnvironmentSerializer(mongo_queryset, many=True).data
+
+                elif instance.time_range == 'THIS_YEAR': 
+                    mongo_queryset = TodayCCCLEnvironment.objects.all()
+                    data['latest'] = TodayCCCLEnvironmentSerializer(mongo_queryset.last(), many=False).data
+                    data['data'] = TodayCCCLEnvironmentSerializer(mongo_queryset, many=True).data
+
+
+        return data
+    
+
+
 
 class ThermohygrometerDataSerializer(DynamicFieldsModelSerializer):
 
@@ -286,8 +487,8 @@ class ThermohygrometerDataSerializer(DynamicFieldsModelSerializer):
     def to_representation(self, instance):
         data = []
 
-        if (instance.device_code.code == 'ModhumatiBank-ENV_01'):
-            if (instance.topic == 'DCIM/ModhumatiBank/ENV_01'):
+        if (instance.device_code.code == 'COLOCITY_THERMOHYGROMETER'):
+            if (instance.topic == 'DCIM/COLOCITY/ENV_01'):
 
                 data = super().to_representation(instance)
                 if instance.time_range == 'TODAY':
@@ -385,5 +586,3 @@ class MinuteLevelDataSerializer(DynamicFieldsModelSerializer):
                     data['data'] = ThisYearEnyNowDataModelCPMSerializer(mongo_queryset, many=True).data
 
         return data
-
-

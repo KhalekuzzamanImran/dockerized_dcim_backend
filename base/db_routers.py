@@ -41,6 +41,9 @@ class NonRelRouter:
         'last30daysthermohygrometermongomodel',
         'thisyearthermohygrometermongomodel',
 
+        'ccclgenerator', 'temporaryccclgenerator', 'todayccclgenerator', 'last7daysccclgenerator', 'last30daysccclgenerator', 'thisyearccclgenerator',
+        'ccclenvironment', 'temporaryccclenvironment', 'todayccclenvironment', 'last7daysccclenvironment', 'last30daysccclenvironment', 'thisyearccclenvironment', 
+        'upsmodel',
     }
 
     def db_for_read(self, model, **_hints):
