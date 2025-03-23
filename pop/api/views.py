@@ -443,9 +443,9 @@ class UpsDataViewSet(viewsets.ReadOnlyModelViewSet):
         return Response(serializer.data)
     
 
+
 class SolarReadingsViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = SolarReadingSerializer
-
 
     def get_queryset(self):
         queryset = SolarReading.objects.using("nonrel").all()
@@ -455,7 +455,7 @@ class SolarReadingsViewSet(viewsets.ReadOnlyModelViewSet):
         print("Time range:", time_range)
 
         if time_range:
-            now = timezone.now()
+            now = timezone.now()  # Use timezone-aware `now`
 
             if time_range == 'TODAY':
                 start_time = timezone.datetime(now.year, now.month, now.day, 0, 0, 0, tzinfo=timezone.utc)
@@ -468,19 +468,22 @@ class SolarReadingsViewSet(viewsets.ReadOnlyModelViewSet):
             else:
                 return queryset
 
-            # Convert start_time to ISO 8601 format without timezone (to match MongoDB format)
-            start_time_iso = start_time.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3]  # Remove timezone and trim microseconds
-            print("Start time (ISO format without timezone):", start_time_iso)
+            # Make sure `start_time` is timezone-aware
+            if timezone.is_naive(start_time):
+                start_time = timezone.make_aware(start_time, timezone.utc)
+
+            # Convert start_time to ISO 8601 format (keep timezone)
+            start_time_iso = start_time.isoformat()  # Django timezone-aware datetime
+            print("Start time (ISO format with timezone):", start_time_iso)
 
             # Debug: Print the first few timestamps from MongoDB
             print("First few timestamps from MongoDB:", queryset[:5].values_list('timestamp', flat=True))
 
-            # Filter queryset where timestamp is greater than or equal to start_time_iso
-            queryset = queryset.filter(timestamp__gte=start_time_iso)
+            # Filter queryset where timestamp is greater than or equal to start_time
+            queryset = queryset.filter(timestamp__gte=start_time)
 
         print("Count from Django ORM (after filtering):", queryset.count())
         return queryset
-
 
     def list(self, request, *args, **kwargs):
         queryset = self.get_queryset()
