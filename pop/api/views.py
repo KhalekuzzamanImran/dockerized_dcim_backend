@@ -444,6 +444,8 @@ class UpsDataViewSet(viewsets.ReadOnlyModelViewSet):
     
 
 
+import pytz
+
 class SolarReadingsViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = SolarReadingSerializer
 
@@ -457,22 +459,25 @@ class SolarReadingsViewSet(viewsets.ReadOnlyModelViewSet):
         if time_range:
             now = timezone.now()  # Use timezone-aware `now`
 
+            # Set timezone to Asia/Dhaka (UTC+6)
+            dhaka_tz = pytz.timezone('Asia/Dhaka')
+
             if time_range == 'TODAY':
-                start_time = timezone.datetime(now.year, now.month, now.day, 0, 0, 0, tzinfo=timezone.utc)
+                start_time = timezone.datetime(now.year, now.month, now.day, 0, 0, 0, tzinfo=dhaka_tz)
             elif time_range == "LAST_7_DAYS":
                 start_time = now - timedelta(days=7)
             elif time_range == "LAST_30_DAYS":
                 start_time = now - timedelta(days=30)
             elif time_range == "THIS_YEAR":
-                start_time = timezone.datetime(now.year, 1, 1, tzinfo=timezone.utc)
+                start_time = timezone.datetime(now.year, 1, 1, tzinfo=dhaka_tz)
             else:
                 return queryset
 
-            # Make sure `start_time` is timezone-aware
+            # Ensure `start_time` is timezone-aware (Asia/Dhaka)
             if timezone.is_naive(start_time):
-                start_time = timezone.make_aware(start_time, timezone.utc)
+                start_time = timezone.make_aware(start_time, timezone=dhaka_tz)
 
-            # Convert start_time to ISO 8601 format (keep timezone)
+            # Convert start_time to ISO 8601 format with timezone
             start_time_iso = start_time.isoformat()  # Django timezone-aware datetime
             print("Start time (ISO format with timezone):", start_time_iso)
 
