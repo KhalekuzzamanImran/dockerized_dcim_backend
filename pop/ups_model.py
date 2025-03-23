@@ -19,3 +19,5 @@ class UpsModel(models.Model):
     class Meta:
         db_table = 'pop_upsdata'
         _use_db = 'nonrel'
+
+

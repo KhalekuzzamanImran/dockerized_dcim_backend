@@ -15,6 +15,8 @@ from pop.models import POP, POPDevice, POPDeviceState
 
 from pop.ups_model import UpsModel
 from pop.serializers import UpsModelSerializer 
+from pop.solar_model import SolarReading
+from pop.serializers import SolarReadingSerializer
 from django.utils import timezone
 from datetime import timedelta, datetime
 
@@ -401,6 +403,52 @@ class UpsDataViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         queryset = UpsModel.objects.using("nonrel").all()
+        print("Count from Django ORM (before filtering):", queryset.count())
+
+        time_range = self.request.query_params.get('time_range', None)
+        print("Time range:", time_range)
+
+        if time_range:
+            now = timezone.now()
+
+            if time_range == 'TODAY':
+                start_time = timezone.datetime(now.year, now.month, now.day, 0, 0, 0, tzinfo=timezone.utc)
+            elif time_range == "LAST_7_DAYS":
+                start_time = now - timedelta(days=7)
+            elif time_range == "LAST_30_DAYS":
+                start_time = now - timedelta(days=30)
+            elif time_range == "THIS_YEAR":
+                start_time = timezone.datetime(now.year, 1, 1, tzinfo=timezone.utc)
+            else:
+                return queryset
+
+            # Convert start_time to ISO 8601 format without timezone (to match MongoDB format)
+            start_time_iso = start_time.strftime('%Y-%m-%dT%H:%M:%S.%f')[:-3]  # Remove timezone and trim microseconds
+            print("Start time (ISO format without timezone):", start_time_iso)
+
+            # Debug: Print the first few timestamps from MongoDB
+            print("First few timestamps from MongoDB:", queryset[:5].values_list('timestamp', flat=True))
+
+            # Filter queryset where timestamp is greater than or equal to start_time_iso
+            queryset = queryset.filter(timestamp__gte=start_time_iso)
+
+        print("Count from Django ORM (after filtering):", queryset.count())
+        return queryset
+
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+
+        return Response(serializer.data)
+    
+
+class SolarReadingsViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = SolarReadingSerializer
+
+
+    def get_queryset(self):
+        queryset = SolarReading.objects.using("nonrel").all()
         print("Count from Django ORM (before filtering):", queryset.count())
 
         time_range = self.request.query_params.get('time_range', None)
