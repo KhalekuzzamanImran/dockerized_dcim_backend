@@ -87,6 +87,7 @@ services:
       - MONGO_INITDB_DATABASE=${MONGO_DB_NAME}
       - MONGO_INITDB_USERNAME=${MONGO_DB_USERNAME}
       - MONGO_INITDB_PASSWORD=${MONGO_DB_PASSWORD}
+    command: mongod --bind_ip 0.0.0.0 --auth
     volumes:
       - dcim_mongodb_data:/data/db
     networks:
