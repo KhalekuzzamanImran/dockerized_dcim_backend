@@ -1,4 +1,4 @@
-from pop.CPM_ENY_NOW_mongo_models import EnyNowDataModelCPM, TemporaryEnyNowDataModelCPM, TodayEnyNowDataModelCPM, Last7DaysEnyNowDataModelCPM, Last30DaysEnyNowDataModelCPM, ThisYearEnyNowDataModelCPM
+from pop.CPM_ENY_NOW_mongo_models import EnyNowDataModelCPM, TodayEnyNowDataModelCPM, Last7DaysEnyNowDataModelCPM, Last30DaysEnyNowDataModelCPM, ThisYearEnyNowDataModelCPM
 
 import logging
 logger = logging.getLogger(__name__)
@@ -72,14 +72,6 @@ def eny_now_mongo_create(data, topic):
     logger.info(f"mongo_db = EnyNowDataModelCPM, topic = {eny_now_mongo_cpm.topic} created {eny_now_mongo_cpm._id} succesfully")
     print('<!---------------------------Data successfully inserted in EnyNowDataModelCPM------------------------------!>')
 
-    temp_eny_now_mongo_cpm = TemporaryEnyNowDataModelCPM.objects.create(
-        device_code = eny_data.get('id'),
-        topic = topic,
-        zygsz = eny_data.get('zygsz'),
-    )
-
-    logger.info(f"mongo_db = TemporaryEnyNowDataModelCPM, topic = {temp_eny_now_mongo_cpm.topic} created {temp_eny_now_mongo_cpm._id} succesfully")
-    print('<!---------------------------Data successfully inserted in TemporaryEnyNowDataModelCPM------------------------------!>')
 
     today_eny_now_mongo_cpm = TodayEnyNowDataModelCPM.objects.create(
         device_code = eny_data.get('id'),
@@ -90,6 +82,7 @@ def eny_now_mongo_create(data, topic):
     logger.info(f"mongo_db = TodayEnyNowDataModelCPM, topic = {today_eny_now_mongo_cpm.topic} created {today_eny_now_mongo_cpm._id} succesfully")
     print('<!---------------------------Data successfully inserted in TodayEnyNowDataModelCPM------------------------------!>')
 
+
     last7days_eny_now_mongo_cpm = Last7DaysEnyNowDataModelCPM.objects.create(
         device_code = eny_data.get('id'),
         topic = topic,
@@ -99,25 +92,23 @@ def eny_now_mongo_create(data, topic):
     logger.info(f"mongo_db = Last7DaysEnyNowDataModelCPM, topic = {last7days_eny_now_mongo_cpm.topic} created {last7days_eny_now_mongo_cpm._id} succesfully")
     print('<!---------------------------Data successfully inserted in Last7DaysEnyNowDataModelCPM------------------------------!>')
 
+
+    last30days_eny_now_mongo_cpm = Last30DaysEnyNowDataModelCPM.objects.create(
+        device_code = eny_data.get('id'),
+        topic = topic,
+        zygsz = eny_data.get('zygsz'),
+        )
     
+    logger.info(f"mongo_db = Last30DaysEnyNowDataModelCPM, topic = {last30days_eny_now_mongo_cpm.topic} created {last30days_eny_now_mongo_cpm._id} succesfully")
+    print('<!---------------------------Data successfully inserted in Last30DaysEnyNowDataModelCPM------------------------------!>')
 
-def date_wise_cpm_enynow_mongo_create(data, device_code, topic, flag):
-    if 'LAST_30_DAYS' in flag:
-        last30days_eny_now_mongo_cpm = Last30DaysEnyNowDataModelCPM.objects.create(
-        device_code = device_code,
+
+    thisyear_eny_now_mongo_cpm = ThisYearEnyNowDataModelCPM.objects.create(
+        device_code = eny_data.get('id'),
         topic = topic,
-        zygsz = data.get('zygsz'),
+        zygsz = eny_data.get('zygsz'),
         )
         
-        logger.info(f"mongo_db = Last30DaysEnyNowDataModelCPM, topic = {last30days_eny_now_mongo_cpm.topic} created {last30days_eny_now_mongo_cpm._id} succesfully")
-        print('<!---------------------------Data successfully inserted in Last30DaysEnyNowDataModelCPM------------------------------!>')
-
-    if 'THIS_YEAR' in flag:
-        thisyear_eny_now_mongo_cpm = ThisYearEnyNowDataModelCPM.objects.create(
-        device_code = device_code,
-        topic = topic,
-        zygsz = data.get('zygsz'),
-        )
-        
-        logger.info(f"mongo_db = ThisYearEnyNowDataModelCPM, topic = {thisyear_eny_now_mongo_cpm.topic} created {thisyear_eny_now_mongo_cpm._id} succesfully")
-        print('<!---------------------------Data successfully inserted in ThisYearEnyNowDataModelCPM------------------------------!>')
+    logger.info(f"mongo_db = ThisYearEnyNowDataModelCPM, topic = {thisyear_eny_now_mongo_cpm.topic} created {thisyear_eny_now_mongo_cpm._id} succesfully")
+    print('<!---------------------------Data successfully inserted in ThisYearEnyNowDataModelCPM------------------------------!>')
+    

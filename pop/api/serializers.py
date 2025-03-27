@@ -1,9 +1,9 @@
 from base.serializers import DynamicFieldsModelSerializer
 from pop.models import POP, POPDevice, POPDeviceState
-from pop.CPM_RT_mongo_models import RTModelCPM, TemporaryRTModelCPM, TodayRTModelCPM, Last7DaysRTModelCPM, Last30DaysRTModelCPM, ThisYearRTModelCPM
-from pop.CPM_ENY_NOW_mongo_models import EnyNowDataModelCPM, TemporaryEnyNowDataModelCPM, TodayEnyNowDataModelCPM, Last7DaysEnyNowDataModelCPM, Last30DaysEnyNowDataModelCPM, ThisYearEnyNowDataModelCPM
+from pop.CPM_RT_mongo_models import RTModelCPM, TodayRTModelCPM, Last7DaysRTModelCPM, Last30DaysRTModelCPM, ThisYearRTModelCPM
+from pop.CPM_ENY_NOW_mongo_models import EnyNowDataModelCPM, TodayEnyNowDataModelCPM, Last7DaysEnyNowDataModelCPM, Last30DaysEnyNowDataModelCPM, ThisYearEnyNowDataModelCPM
 from pop.thermohygrometer_modhumati_models import ThermoHygrometerMongoModel, TempThermoHygrometerMongoModel, TodayThermoHygrometerMongoModel, Last7DaysThermoHygrometerMongoModel, Last30DaysThermoHygrometerMongoModel, ThisYearThermoHygrometerMongoModel
-from pop.CCCL_generator_mongo_model import CCCLGenerator, TemporaryCCCLGenerator, TodayCCCLGenerator, Last7DaysCCCLGenerator, Last30DaysCCCLGenerator, ThisYearCCCLGenerator
+from pop.CCCL_generator_mongo_model import CCCLGenerator, TodayCCCLGenerator, Last7DaysCCCLGenerator, Last30DaysCCCLGenerator, ThisYearCCCLGenerator
 from pop.CCCL_environment_mongo_model import CCCLEnvironment, TemporaryCCCLEnvironment, TodayCCCLEnvironment, Last7DaysCCCLEnvironment, Last30DaysCCCLEnvironment, ThisYearCCCLEnvironment
 import datetime
 import calendar
@@ -54,13 +54,6 @@ class RTModelCPMSerializer(DynamicFieldsModelSerializer):
         fields = '__all__'
 
         
-class TemporaryRTModelCPMSerializer(DynamicFieldsModelSerializer):
-
-    class Meta:
-        model = TemporaryRTModelCPM
-        fields = '__all__'
-
-
 class TodayRTModelCPMSerializer(DynamicFieldsModelSerializer):
 
     class Meta:
@@ -93,12 +86,6 @@ class EnyNowDataModelCPMSerializer(DynamicFieldsModelSerializer):
 
     class Meta:
         model = EnyNowDataModelCPM
-        fields = '__all__'
-
-class TemporaryEnyNowDataModelCPMSerializer(DynamicFieldsModelSerializer):
-
-    class Meta:
-        model = TemporaryEnyNowDataModelCPM
         fields = '__all__'
 
 
@@ -176,12 +163,6 @@ class CCCLGeneratorSerializer(DynamicFieldsModelSerializer):
 
     class Meta:
         model = CCCLGenerator
-        fields = '__all__'
-
-class TemporaryCCCLGeneratorSerializer(DynamicFieldsModelSerializer):
-
-    class Meta:
-        model = TemporaryCCCLGenerator
         fields = '__all__'
 
 
@@ -358,82 +339,70 @@ class LatestEnyNowDataSerializer(DynamicFieldsModelSerializer):
     
 
 class CPMDataSerializer(DynamicFieldsModelSerializer):
-
     class Meta:
         model = POPDeviceState
         exclude = ['data', 'updated_at']
 
     def to_representation(self, instance):
-        data = []
+        if instance.device_code.code != '3071523B00003' or instance.topic != 'MQTT_RT_DATA':
+            return super().to_representation(instance)
 
-        if (instance.device_code.code == '3071523B00003'):
-            if (instance.topic == 'MQTT_RT_DATA'):
+        # Define mapping for time_range to models & serializers
+        time_range_mapping = {
+            'TODAY': (TodayRTModelCPM, TodayRTModelCPMSerializer),
+            'LAST_7_DAYS': (Last7DaysRTModelCPM, Last7DaysRTModelCPMSerializer),
+            'LAST_30_DAYS': (Last30DaysRTModelCPM, Last30DaysRTModelCPMSerializer),
+            'THIS_YEAR': (ThisYearRTModelCPM, ThisYearRTModelCPMSerializer),
+        }
 
-                data = super().to_representation(instance)
-                if instance.time_range == 'TODAY':
+        model_class, serializer_class = time_range_mapping.get(instance.time_range, (None, None))
+        if not model_class or not serializer_class:
+            return super().to_representation(instance)  # Return default representation if no match found
 
-                    mongo_queryset = TodayRTModelCPM.objects.all()
-                    data['latest'] = TodayRTModelCPMSerializer(mongo_queryset.last(), many=False).data
-                    data['data'] = TodayRTModelCPMSerializer(mongo_queryset, many=True).data
+        # Query data from MongoDB
+        mongo_queryset = model_class.objects.all()
+        latest_entry = mongo_queryset.last()
 
-                elif instance.time_range == 'LAST_7_DAYS':
+        return {
+            **super().to_representation(instance),
+            'latest': serializer_class(latest_entry).data if latest_entry else None,
+            'data': serializer_class(mongo_queryset, many=True).data if mongo_queryset else [],
+        }
 
-                    mongo_queryset = Last7DaysRTModelCPM.objects.all()
-                    data['latest'] = Last7DaysRTModelCPMSerializer(mongo_queryset.last(), many=False).data
-                    data['data'] = Last7DaysRTModelCPMSerializer(mongo_queryset, many=True).data
-
-                elif instance.time_range == 'LAST_30_DAYS':
-
-                    mongo_queryset = Last30DaysRTModelCPM.objects.all()
-                    data['latest'] = Last30DaysRTModelCPMSerializer(mongo_queryset.last(), many=False).data
-                    data['data'] = Last30DaysRTModelCPMSerializer(mongo_queryset, many=True).data
-
-                elif instance.time_range == 'THIS_YEAR': 
-                    mongo_queryset = ThisYearRTModelCPM.objects.all()
-                    data['latest'] = ThisYearRTModelCPMSerializer(mongo_queryset.last(), many=False).data
-                    data['data'] = ThisYearRTModelCPMSerializer(mongo_queryset, many=True).data
-
-
-        return data
     
 
 class CCCLGeneratorSerializer(DynamicFieldsModelSerializer):
-
     class Meta:
         model = POPDeviceState
         exclude = ['data', 'updated_at']
 
     def to_representation(self, instance):
-        data = []
+        # Pre-checks to avoid unnecessary MongoDB queries
+        if instance.device_code.code != 'GREEN_POWER_GENERATOR' or instance.topic != 'CCCL/PURBACHAL/ENM_01':
+            return super().to_representation(instance)
 
-        if (instance.device_code.code == 'GREEN_POWER_GENERATOR'):
-            if (instance.topic == 'CCCL/PURBACHAL/ENM_01'):
-                
-                data = super().to_representation(instance)
-                if instance.time_range == 'TODAY':
-                    mongo_queryset = TodayCCCLGenerator.objects.all()
-                    data['latest'] = TodayCCCLGeneratorSerializer(mongo_queryset.last(), many=False).data
-                    data['data'] = TodayCCCLGeneratorSerializer(mongo_queryset, many=True).data
+        # Mapping time_range to model and serializer
+        time_range_mapping = {
+            'TODAY': (TodayCCCLGenerator, TodayCCCLGeneratorSerializer),
+            'LAST_7_DAYS': (Last7DaysCCCLGenerator, Last7DaysCCCLGeneratorSerializer),
+            'LAST_30_DAYS': (Last30DaysCCCLGenerator, Last30DaysCCCLGeneratorSerializer),
+            'THIS_YEAR': (ThisYearCCCLGenerator, ThisYearCCCLGeneratorSerializer),  # Fixed wrong mapping
+        }
 
-                elif instance.time_range == 'LAST_7_DAYS':
+        model_class, serializer_class = time_range_mapping.get(instance.time_range, (None, None))
+        if not model_class or not serializer_class:
+            return super().to_representation(instance)  # Return default representation if no match
 
-                    mongo_queryset = Last7DaysCCCLGenerator.objects.all()
-                    data['latest'] = Last7DaysCCCLGeneratorSerializer(mongo_queryset.last(), many=False).data
-                    data['data'] = Last7DaysCCCLGeneratorSerializer(mongo_queryset, many=True).data
+        # Fetch MongoDB data
+        mongo_queryset = model_class.objects.all()
+        latest_entry = mongo_queryset.last()
 
-                elif instance.time_range == 'LAST_30_DAYS':
+        return {
+            **super().to_representation(instance),
+            'latest': serializer_class(latest_entry).data if latest_entry else None,
+            'data': serializer_class(mongo_queryset, many=True).data if mongo_queryset else [],
+        }
 
-                    mongo_queryset = Last30DaysCCCLGenerator.objects.all()
-                    data['latest'] = Last30DaysCCCLGeneratorSerializer(mongo_queryset.last(), many=False).data
-                    data['data'] = Last30DaysCCCLGeneratorSerializer(mongo_queryset, many=True).data
-
-                elif instance.time_range == 'THIS_YEAR': 
-                    mongo_queryset = TodayCCCLGenerator.objects.all()
-                    data['latest'] = TodayCCCLGeneratorSerializer(mongo_queryset.last(), many=False).data
-                    data['data'] = TodayCCCLGeneratorSerializer(mongo_queryset, many=True).data
-
-
-        return data
     
 
 class CCCLEnvironmentSerializer(DynamicFieldsModelSerializer):
@@ -558,31 +527,28 @@ class MinuteLevelDataSerializer(DynamicFieldsModelSerializer):
         exclude = ['data']
 
     def to_representation(self, instance):
-        data = []
+        # Ensure the instance matches expected conditions before querying MongoDB
+        if instance.device_code.code != '3071523B00003' or instance.topic != 'MQTT_ENY_NOW':
+            return super().to_representation(instance)
 
-        if (instance.device_code.code == '3071523B00003'):
-            if (instance.topic == 'MQTT_ENY_NOW'):
+        # Map time ranges to corresponding models and serializers
+        time_range_mapping = {
+            'TODAY': (TodayEnyNowDataModelCPM, TodayEnyNowDataModelCPMSerializer),
+            'LAST_7_DAYS': (Last7DaysEnyNowDataModelCPM, Last7DaysEnyNowDataModelCPMSerializer),
+            'LAST_30_DAYS': (Last30DaysEnyNowDataModelCPM, Last30DaysEnyNowDataModelCPMSerializer),
+            'THIS_YEAR': (ThisYearEnyNowDataModelCPM, ThisYearEnyNowDataModelCPMSerializer),
+        }
 
-                data = super().to_representation(instance)
-                if instance.time_range == 'TODAY':
+        model_class, serializer_class = time_range_mapping.get(instance.time_range, (None, None))
+        if not model_class or not serializer_class:
+            return super().to_representation(instance)  # Default representation if time_range is invalid
 
-                    mongo_queryset = TodayEnyNowDataModelCPM.objects.all()
-                    data['latest'] = TodayEnyNowDataModelCPMSerializer(mongo_queryset.last(), many=False).data
-                    data['data'] = TodayEnyNowDataModelCPMSerializer(mongo_queryset, many=True).data
+        # Query MongoDB
+        mongo_queryset = model_class.objects.all()
+        latest_entry = mongo_queryset.last()
 
-                elif instance.time_range == 'LAST_7_DAYS':
-                    mongo_queryset = Last7DaysEnyNowDataModelCPM.objects.all()
-                    data['latest'] = Last7DaysEnyNowDataModelCPMSerializer(mongo_queryset.last(), many=False).data
-                    data['data'] = Last7DaysEnyNowDataModelCPMSerializer(mongo_queryset, many=True).data
-
-                elif instance.time_range == 'LAST_30_DAYS':
-                    mongo_queryset = Last30DaysEnyNowDataModelCPM.objects.all()
-                    data['latest'] = Last30DaysEnyNowDataModelCPMSerializer(mongo_queryset.last(), many=False).data
-                    data['data'] = Last30DaysEnyNowDataModelCPMSerializer(mongo_queryset, many=True).data
-
-                elif instance.time_range == 'THIS_YEAR': 
-                    mongo_queryset = ThisYearEnyNowDataModelCPM.objects.all()
-                    data['latest'] = ThisYearEnyNowDataModelCPMSerializer(mongo_queryset.last(), many=False).data
-                    data['data'] = ThisYearEnyNowDataModelCPMSerializer(mongo_queryset, many=True).data
-
-        return data
+        return {
+            **super().to_representation(instance),
+            'latest': serializer_class(latest_entry).data if latest_entry else None,
+            'data': serializer_class(mongo_queryset, many=True).data if mongo_queryset else [],
+        }
