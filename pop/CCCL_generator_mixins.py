@@ -39,6 +39,8 @@ def cccl_enm_mongo_create(data, topic):
             rt_data['zglys'] = dic.get('val')
         elif dic.get('id') == 26:
             rt_data['f'] = dic.get('val')
+        elif dic.get('id') == 28:
+            rt_data['zygsz'] = dic.get('val')
 
     # print(rt_data)
     cccl_mongo = CCCLGenerator.objects.create(
@@ -60,6 +62,7 @@ def cccl_enm_mongo_create(data, topic):
         pfc = rt_data.get('pfc', None),
         zglys = rt_data.get('zglys', None),
         f = rt_data.get('f', None),
+        zygsz = rt_data.get('zygsz', None)
     ) 
 
     logger.info(f"mongo_db = CCCLGenerator, topic = {topic} created {cccl_mongo._id} succesfully")
@@ -84,6 +87,7 @@ def cccl_enm_mongo_create(data, topic):
         pfc = rt_data.get('pfc', None),
         zglys = rt_data.get('zglys', None),
         f = rt_data.get('f', None),
+        zygsz = rt_data.get('zygsz', None)
     ) 
 
     logger.info(f"mongo_db = TodayCCCLGenerator, topic = {topic} created {today_cccl_mongo._id} succesfully")
@@ -108,6 +112,7 @@ def cccl_enm_mongo_create(data, topic):
         pfc = rt_data.get('pfc', None),
         zglys = rt_data.get('zglys', None),
         f = rt_data.get('f', None),
+        zygsz = rt_data.get('zygsz', None)
     )
 
     logger.info(f"mongo_db = Last7DaysCCCLGenerator, topic = {topic} created {last7days_cccl_mongo._id} succesfully")
@@ -132,6 +137,7 @@ def cccl_enm_mongo_create(data, topic):
         pfc = rt_data.get('pfc', None),
         zglys = rt_data.get('zglys', None),
         f = rt_data.get('f', None),
+        zygsz = rt_data.get('zygsz', None)
     )
 
     logger.info(f"mongo_db = Last30DaysCCCLGenerator, topic = {topic} created {last30days_cccl_mongo._id} succesfully")
@@ -155,6 +161,7 @@ def cccl_enm_mongo_create(data, topic):
         pfc = rt_data.get('pfc', None),
         zglys = rt_data.get('zglys', None),
         f = rt_data.get('f', None),
+        zygsz = rt_data.get('zygsz', None)
     )
 
     logger.info(f"mongo_db = ThisYearCCCLGenerator, topic = {topic} created {thisyear_cccl_mongo._id} succesfully")
