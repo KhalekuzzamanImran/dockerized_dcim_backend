@@ -21,6 +21,7 @@ class CCCLGenerator(mongo_models.Model):
     pfc = mongo_models.FloatField()
     zglys = mongo_models.FloatField()
     f = mongo_models.FloatField()
+    zygsz = mongo_models.FloatField()
       
     class Meta:
         _use_db = 'nonrel'
@@ -50,6 +51,7 @@ class TodayCCCLGenerator(mongo_models.Model):
     pfc = mongo_models.FloatField()
     zglys = mongo_models.FloatField()
     f = mongo_models.FloatField()
+    zygsz = mongo_models.FloatField()
       
     class Meta:
         _use_db = 'nonrel'
@@ -78,6 +80,7 @@ class Last7DaysCCCLGenerator(mongo_models.Model):
     pfc = mongo_models.FloatField()
     zglys = mongo_models.FloatField()
     f = mongo_models.FloatField()
+    zygsz = mongo_models.FloatField()
       
     class Meta:
         _use_db = 'nonrel'
@@ -106,6 +109,7 @@ class Last30DaysCCCLGenerator(mongo_models.Model):
     pfc = mongo_models.FloatField()
     zglys = mongo_models.FloatField()
     f = mongo_models.FloatField()
+    zygsz = mongo_models.FloatField()
       
     class Meta:
         _use_db = 'nonrel'
@@ -134,6 +138,7 @@ class ThisYearCCCLGenerator(mongo_models.Model):
     pfc = mongo_models.FloatField()
     zglys = mongo_models.FloatField()
     f = mongo_models.FloatField()
+    zygsz = mongo_models.FloatField()
       
     class Meta:
         _use_db = 'nonrel'
