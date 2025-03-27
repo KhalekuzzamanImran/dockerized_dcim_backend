@@ -70,21 +70,6 @@ class EnyNowDataModelCPM(mongo_models.Model):
         return self.device_code
     
 
-class TemporaryEnyNowDataModelCPM(mongo_models.Model):
-    _id = mongo_models.ObjectIdField()
-    created_date = mongo_models.DateField(auto_now_add=True)
-    created_time = mongo_models.TimeField(auto_now_add=True)
-    device_code = mongo_models.CharField(max_length=360)
-    topic = mongo_models.CharField(max_length=256)
-    zygsz = mongo_models.FloatField()
-
-    class Meta:
-        _use_db = 'nonrel'
-
-    def __str__(self):
-        return self.device_code
-    
-
 class TodayEnyNowDataModelCPM(mongo_models.Model):
     _id = mongo_models.ObjectIdField()
     created_date = mongo_models.DateField(auto_now_add=True)
