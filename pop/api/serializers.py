@@ -377,31 +377,61 @@ class CCCLGeneratorSerializer(DynamicFieldsModelSerializer):
         exclude = ['data', 'updated_at']
 
     def to_representation(self, instance):
-        # Pre-checks to avoid unnecessary MongoDB queries
-        if instance.device_code.code != 'GREEN_POWER_GENERATOR' or instance.topic != 'CCCL/PURBACHAL/ENM_01':
-            return super().to_representation(instance)
+        base_data = super().to_representation(instance)
 
-        # Mapping time_range to model and serializer
+        if instance.device_code.code != 'GREEN_POWER_GENERATOR' or instance.topic != 'CCCL/PURBACHAL/ENM_01':
+            return base_data
+
         time_range_mapping = {
             'TODAY': (TodayCCCLGenerator, TodayCCCLGeneratorSerializer),
             'LAST_7_DAYS': (Last7DaysCCCLGenerator, Last7DaysCCCLGeneratorSerializer),
             'LAST_30_DAYS': (Last30DaysCCCLGenerator, Last30DaysCCCLGeneratorSerializer),
-            'THIS_YEAR': (ThisYearCCCLGenerator, ThisYearCCCLGeneratorSerializer),  # Fixed wrong mapping
+            'THIS_YEAR': (ThisYearCCCLGenerator, ThisYearCCCLGeneratorSerializer),
         }
 
         model_class, serializer_class = time_range_mapping.get(instance.time_range, (None, None))
         if not model_class or not serializer_class:
-            return super().to_representation(instance)  # Return default representation if no match
+            return base_data
 
-        # Fetch MongoDB data
-        mongo_queryset = model_class.objects.all()
-        latest_entry = mongo_queryset.last()
+        try:
+            mongo_queryset = model_class.objects.all()
+            if not mongo_queryset.exists():
+                return {
+                    **base_data,
+                    'latest': None,
+                    'first': None,
+                    'energy_consumption': None,
+                }
 
-        return {
-            **super().to_representation(instance),
-            'latest': serializer_class(latest_entry).data if latest_entry else None,
-            'data': serializer_class(mongo_queryset, many=True).data if mongo_queryset else [],
-        }
+            first_entry = mongo_queryset.first()
+            latest_entry = mongo_queryset.last()
+
+            # Handle missing values with getattr and fallback
+            latest_zygsz = getattr(latest_entry, 'zygsz', None)
+            first_zygsz = getattr(first_entry, 'zygsz', None)
+
+            energy_consumption = (
+                latest_zygsz - first_zygsz
+                if latest_zygsz is not None and first_zygsz is not None
+                else None
+            )
+
+            return {
+                **base_data,
+                'latest': serializer_class(latest_entry).data if latest_entry else None,
+                'first': serializer_class(first_entry).data if first_entry else None,
+                'energy_consumption': energy_consumption
+            }
+        except Exception as e:
+            # Fail-safe return in case of unexpected error
+            return {
+                **base_data,
+                'latest': None,
+                'first': None,
+                'energy_consumption': None,
+                'error': str(e)
+            }
+
 
     
 
@@ -546,9 +576,11 @@ class MinuteLevelDataSerializer(DynamicFieldsModelSerializer):
         # Query MongoDB
         mongo_queryset = model_class.objects.all()
         latest_entry = mongo_queryset.last()
+        first_entry = mongo_queryset.first()
 
         return {
             **super().to_representation(instance),
             'latest': serializer_class(latest_entry).data if latest_entry else None,
-            'data': serializer_class(mongo_queryset, many=True).data if mongo_queryset else [],
+            'first': serializer_class(first_entry).data if first_entry else None,
+            'energy_consumption': (latest_entry.zygsz - first_entry.zygsz) if latest_entry and first_entry else None
         }

@@ -3,7 +3,7 @@ from pop.api.views import (
     LatestRTDataViewSet, LatestEnyNowDataViewSet, LatestThermohygrometerDataViewSet,
     CPMDataViewSet, MinuteLevelDataView,ThermohygrometerDataViewSet, LatestCCCLGeneratorDataViewSet, CCCLGeneratorViewSet, CCCLEnvironmentViewSet, LatestCCCLEnvironmentDataViewSet,
     UpsDataViewSet)
-from pop.solar_views import SolarReadingViewSet
+from pop.solar_views import SolarReadingViewSet, SolarEnergyConsumptionViewSet
 from django.urls import path, include
 
 from rest_framework import routers
@@ -30,6 +30,7 @@ router.register(r'cccl-environment-data', CCCLEnvironmentViewSet, 'get_cccl_envi
 router.register(r'ups-data', UpsDataViewSet, 'get_ups_data')
 # router.register(r'solar-readings', SolarReadingsViewSet, 'get_solar_data')
 router.register(r'solar-readings', SolarReadingViewSet, 'solar-readings')
+router.register(r'solar-energy-consumption', SolarEnergyConsumptionViewSet, 'solar-readings')
 
 urlpatterns = [
     path('', include(router.urls)),

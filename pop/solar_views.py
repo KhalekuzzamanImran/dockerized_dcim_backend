@@ -10,6 +10,48 @@ MONGO_URI = "mongodb://root:root@165.22.221.252:27017/"
 client = MongoClient(MONGO_URI)
 db = client["dcim"]  # Replace with actual database name
 
+class SolarEnergyConsumptionViewSet(viewsets.ViewSet):
+    def list(self, request):
+        try:
+            # Map time_range to collections
+            collection_map = {
+                "TODAY": "pop_today_solar_readings",
+                "LAST_30_DAYS": "pop_thismonth_solar_readings",
+                "THIS_YEAR": "pop_solar_readings"
+            }
+            time_range = request.query_params.get("time_range", "TODAY").upper()
+            collection_name = collection_map.get(time_range, "pop_solar_readings")
+            collection = db[collection_name]
+
+            first_entry = collection.find_one(sort=[('_id', 1)])
+            last_entry = collection.find_one(sort=[('_id', -1)])
+
+            if not first_entry or not last_entry:
+                return Response({
+                    "energy_consumption": 0,
+                    "time_range": time_range,
+                    "first_timestamp": None,
+                    "last_timestamp": None,
+                    "message": "No data found for selected time range"
+                })
+
+            first_value = first_entry.get('energy_consumption', [0])[0]
+            last_value = last_entry.get('energy_consumption', [0])[0]
+
+            energy_consumption = last_value - first_value
+
+            return Response({
+                "energy_consumption": energy_consumption,
+                "time_range": time_range,
+                "first_timestamp": first_entry.get('timestamp'),
+                "last_timestamp": last_entry.get('timestamp')
+            })
+
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
 class SolarReadingViewSet(viewsets.ViewSet):
     def list(self, request):
         try:
@@ -17,6 +59,7 @@ class SolarReadingViewSet(viewsets.ViewSet):
             collection_map = {
                 "TODAY": "pop_today_solar_readings",
                 "LAST_30_DAYS": "pop_thismonth_solar_readings",
+                "THIS_YEAR": "pop_solar_readings"
             }
             time_range = request.query_params.get("time_range", "TODAY").upper()
             collection_name = collection_map.get(time_range, "pop_solar_readings")

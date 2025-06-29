@@ -6,6 +6,7 @@ import time
 
 temp = 0
 count = 0
+isend = None
 rt_data = []
 eny_data = []
 
@@ -77,9 +78,8 @@ def connect_mqtt() -> mqtt_client:
 def subscribe(client: mqtt_client):
     
     def on_message(client, userdata, msg):
-        global count, temp
+        global count, temp, isend
         global rt_data, eny_data
-        flag = True
         # print(f"Received `{msg.payload.decode()}` from `{msg.topic}` topic")
 
         try:
@@ -87,7 +87,7 @@ def subscribe(client: mqtt_client):
             data = json.loads(data)      # python dictionary
                 
            # DCIM
-            if (msg.topic == 'MQTT_RT_DATA'):
+            if (msg.topic == 'MQTT_RT_DATA' and count > 1):
                 rt_data.append(normalize_data(data))
                     
                 if(int(data['isend']) == 1):
@@ -99,7 +99,7 @@ def subscribe(client: mqtt_client):
             elif (msg.topic == 'MQTT_DAY_DATA'):
                 day_data_mongo_create(data, msg.topic)
 
-            elif (msg.topic == 'MQTT_ENY_NOW'):
+            elif (msg.topic == 'MQTT_ENY_NOW' and count > 1):
                 eny_data.append(normalize_data(data))
 
                 if(int(data['isend']) == 1):
